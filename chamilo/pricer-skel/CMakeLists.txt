@@ -47,8 +47,10 @@ add_subdirectory(src/3rdparty/jlparser)
 add_executable(test-parser src/test_parser.cpp)
 target_link_libraries(test-parser jl_parser ${LIBS})
 
-add_executable(mc-example src/mc_example.cpp)
+add_executable(mc-example src/mc_example.cpp src/MonteCarlo.cpp src/MonteCarlo.hpp src/BlackScholesModel.cpp src/BlackScholesModel.hpp src/Option.cpp src/Option.hpp)
 target_link_libraries(mc-example jl_parser ${LIBS})
+
+
 
 # Print compiler flags
 get_directory_property(DirDefs COMPILE_DEFINITIONS)

@@ -3,6 +3,7 @@
 #include "Option.hpp"
 #include "BlackScholesModel.hpp"
 #include "pnl/pnl_random.h"
+#include <math.h>
 
 class MonteCarlo
 {
