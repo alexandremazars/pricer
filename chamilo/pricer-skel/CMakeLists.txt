@@ -60,3 +60,15 @@ if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
 else()
     message(STATUS "C++ Flags: ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG} ${CMAKE_LINKER_EXE_FLAGS}" )
 endif()
+
+
+# Télécharge googletest au moment de la configureation
+configure_file(cmake/CMakeLists.txt
+               googletest-download/CMakeLists.txt)
+execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
+execute_process(COMMAND ${CMAKE_COMMAND} --build .
+
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
+# Ajout googletest directement au moment de la compilation
+add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src)
