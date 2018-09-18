@@ -7,7 +7,7 @@
 class PerformanceOption : public Option {
 public:
 
-    double strike_;
+    PerformanceOption(double T, int nbTimeSteps, int size);
 
     /**
      * Calcule la valeur du payoff sur la trajectoire

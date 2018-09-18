@@ -10,6 +10,8 @@ public:
 
     double strike_;
 
+    BasketOption(double T, int nbTimeSteps, int size, double strike);
+
     /**
      * Calcule la valeur du payoff sur la trajectoire
      *

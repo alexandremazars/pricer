@@ -4,6 +4,13 @@
 
 #include "BasketOption.hpp"
 
+BasketOption::BasketOption(double T, int nbTimeSteps, int size, double strike){
+    T_ = T;
+    nbTimeSteps_ = nbTimeSteps;
+    size_ = size;
+    strike_ = strike;
+}
+
 double BasketOption::payoff(const PnlMat *path) {
     const double weight = 1/size_;
     double sum = 0;

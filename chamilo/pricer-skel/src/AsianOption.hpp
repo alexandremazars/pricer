@@ -10,6 +10,8 @@ public:
 
     double strike_;
 
+    AsianOption(double T, int nbTimeSteps, int size, double strike);
+
     /**
      * Calcule la valeur du payoff sur la trajectoire
      *
@@ -19,4 +21,6 @@ public:
      * @return phi(trajectoire)
      */
     double payoff(const PnlMat *path) override;
+
+
 };
