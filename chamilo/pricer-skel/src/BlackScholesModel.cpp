@@ -4,6 +4,14 @@
 
 #include "BlackScholesModel.hpp"
 
+BlackScholesModel::BlackScholesModel(int size, double r, double rho, PnlVect *sigma, PnlVect *spot){
+    size_ = size;
+    r_ = r;
+    rho_ = rho;
+    sigma_ = sigma;
+    spot_ = spot;
+}
+
 /**
      * Génère une trajectoire du modèle et la stocke dans path
      *
