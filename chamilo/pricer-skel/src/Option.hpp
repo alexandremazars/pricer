@@ -21,6 +21,7 @@ public:
      * @return phi(trajectoire)
      */
     virtual double payoff(const PnlMat *path) = 0;
+    virtual ~Option() = default;
 };
 
 

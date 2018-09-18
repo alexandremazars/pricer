@@ -5,6 +5,12 @@
 #include "PerformanceOption.hpp"
 
 
+PerformanceOption::PerformanceOption(double T, int nbTimeSteps, int size){
+    T_ = T;
+    nbTimeSteps_ = nbTimeSteps;
+    size_ = size;
+}
+
 double PerformanceOption::payoff(const PnlMat *path) {
     double sum_N = 0;
     for (int i = 1; i < nbTimeSteps_ + 1 ; ++i) {
