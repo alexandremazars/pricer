@@ -47,7 +47,9 @@ add_subdirectory(src/3rdparty/jlparser)
 add_executable(test-parser src/test_parser.cpp)
 target_link_libraries(test-parser jl_parser ${LIBS})
 
-add_executable(mc-example src/mc_example.cpp src/MonteCarlo.cpp src/MonteCarlo.hpp src/BlackScholesModel.cpp src/BlackScholesModel.hpp src/Option.cpp src/Option.hpp)
+add_executable(mc-example src/mc_example.cpp src/MonteCarlo.cpp src/MonteCarlo.hpp src/BlackScholesModel.cpp src/BlackScholesModel.hpp src/Option.cpp src/Option.hpp
+        src/BasketOption.cpp src/BasketOption.hpp src/AsianOption.cpp src/AsianOption.hpp src/PerformanceOption.cpp src/PerformanceOption.hpp
+        src/CallOption.cpp src/CallOption.hpp )
 target_link_libraries(mc-example jl_parser ${LIBS})
 
 
@@ -63,12 +65,12 @@ endif()
 
 
 # Télécharge googletest au moment de la configureation
-configure_file(cmake/CMakeLists.txt
-               googletest-download/CMakeLists.txt)
-execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
-execute_process(COMMAND ${CMAKE_COMMAND} --build .
+# configure_file(cmake/CMakeLists.txt
+#               googletest-download/CMakeLists.txt)
+#execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
+#  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
+#execute_process(COMMAND ${CMAKE_COMMAND} --build .
 
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
+#  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
 # Ajout googletest directement au moment de la compilation
-add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src)
+#add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src)
