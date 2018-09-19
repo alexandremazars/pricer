@@ -4,7 +4,13 @@
 
 #include "MonteCarlo.hpp"
 
-
+MonteCarlo::MonteCarlo(BlackScholesModel *mod, Option *opt, PnlRng *rng, double fdStep, int nbSamples){
+    mod_ = mod;
+    opt_ = opt;
+    rng_ = rng;
+    fdStep_ = fdStep;
+    nbSamples_ = nbSamples;
+}
 /**
     * Calcule le prix de l'option à la date 0
     *
