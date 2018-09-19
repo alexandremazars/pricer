@@ -71,5 +71,10 @@ execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
 WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
 execute_process(COMMAND ${CMAKE_COMMAND} --build .
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
+
 # Ajout googletest directement au moment de la compilation
 add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src)
+include_directories("${PROJECT_SOURCE_DIR}")
+
+add_subdirectory(tests)
+add_test(NAME test COMMAND test)
