@@ -127,6 +127,21 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
             pnl_mat_set(path, (i+t+1), d, prix);
         }
     }
+}
+
+void BlackScholesModel::shiftAsset(PnlMat *shift_path, const PnlMat *path, int d, double h, double t, double timestep){
+    double nbTimeSteps = path->m;
+
+    // Retourne i tel que Ti < t < Ti+1
+    int nbSteps = 0;
+    while (nbSteps * timestep < t) {
+      nbSteps += 1;
+    }
+
+    shift_path = pnl_mat_copy(path);
+    for (int i = nbSteps + 1; i < nbTimeSteps; i++) {
+      pnl_mat_set(shift_path, i , d, (1+h) * pnl_mat_get(path, i , d));
+    }
 
 
 }
