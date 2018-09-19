@@ -6,4 +6,6 @@
 # First Simple Google Test
 add_executable(test main.cpp ${SOURCESTEST} ${HEADERSTEST})
 target_link_libraries(test gtest gtest_main ${LIBS})
+target_link_libraries(test jl_parser ${LIBS})
+
 #add_test(NAME test COMMAND simple)

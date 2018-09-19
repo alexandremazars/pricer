@@ -34,7 +34,7 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *r
     PnlMat *mat_Chol = pnl_mat_copy(mat_Cor);
     pnl_mat_chol(mat_Chol);
 
-    pnl_mat_resize(path, nbTimeSteps + 1, size_);
+    path = pnl_mat_create(nbTimeSteps + 1, size_);
 
     //Simuler vecteurs gaussiens
     PnlMat *suite_Gauss = pnl_mat_create(size_, nbTimeSteps + 1);
@@ -49,8 +49,8 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *r
 
 
     //Calcul des prix
-    PnlVect *row_Chol;
-    PnlVect *col_Gauss;
+    PnlVect *row_Chol = pnl_vect_create(size_);
+    PnlVect *col_Gauss = pnl_vect_create(size_);
     for (int d = 0; d < size_ ; ++d) {
         double prix_Prec = pnl_vect_get(spot_, d);
         double prix = prix_Prec;

@@ -17,8 +17,8 @@ double PerformanceOption::payoff(const PnlMat *path) {
         double sum_num = 0;
         double sum_denom = 0;
         for (int d = 0; d < size_; ++d) {
-            sum_num += pnl_mat_get(path, d, i);
-            sum_denom += pnl_mat_get(path, d, i-1);
+            sum_num += pnl_mat_get(path, i, d);
+            sum_denom += pnl_mat_get(path, i-1, d);
         }
         sum_N += fmax(sum_num/sum_denom - 1, 0);
     }
