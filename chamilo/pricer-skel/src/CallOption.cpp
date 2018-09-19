@@ -12,5 +12,5 @@ CallOption::CallOption(double T, int nbTimeSteps, int size, double strike){
 }
 
 double CallOption::payoff(const PnlMat *path) {
-    return fmax(pnl_mat_get(path, 0, nbTimeSteps_)-strike_, 0);
+    return fmax(pnl_mat_get(path, nbTimeSteps_, 0)-strike_, 0);
 }
