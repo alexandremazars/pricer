@@ -4,6 +4,8 @@
 
 #include "BasketOption.hpp"
 
+using namespace std;
+
 BasketOption::BasketOption(double T, int nbTimeSteps, int size, double strike){
     T_ = T;
     nbTimeSteps_ = nbTimeSteps;
@@ -12,10 +14,11 @@ BasketOption::BasketOption(double T, int nbTimeSteps, int size, double strike){
 }
 
 double BasketOption::payoff(const PnlMat *path) {
-    const double weight = 1/size_;
     double sum = 0;
     for (int d = 0; d < size_; ++d) {
-        sum += weight*pnl_mat_get(path, d, nbTimeSteps_);
+        sum += pnl_mat_get(path, nbTimeSteps_, d);
     }
+    sum = sum / size_;
+    //cout << weight << "weights" <<endl;
     return fmax(sum-strike_, 0);
 }
