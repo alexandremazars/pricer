@@ -65,12 +65,11 @@ endif()
 
 
 # Télécharge googletest au moment de la configureation
-# configure_file(cmake/CMakeLists.txt
-#               googletest-download/CMakeLists.txt)
-#execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
-#  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
-#execute_process(COMMAND ${CMAKE_COMMAND} --build .
-
-#  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
+configure_file(CMakeLists.txt.in
+        googletest-download/CMakeLists.txt)
+execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
+WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
+execute_process(COMMAND ${CMAKE_COMMAND} --build .
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
 # Ajout googletest directement au moment de la compilation
-#add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src)
+add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src)
