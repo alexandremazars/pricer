@@ -42,8 +42,8 @@ public:
      * @param[in] t date à laquelle le calcul est fait
      * @param[out] delta contient le vecteur de delta
      * de confiance sur le calcul du delta
+     * @param[in] delta contient le vecteur de delta
+     * de confiance sur le calcul du delta
      */
-    void delta(const PnlMat *past, double t, PnlVect *delta);
+    void delta(const PnlMat *past, double t, PnlVect *delta, const PnlVect *conf_delta);
 };
-
-
