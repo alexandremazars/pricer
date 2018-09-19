@@ -22,7 +22,7 @@ void MonteCarlo::price(double &prix, double &ic){
     }
     double estimateur = exp(-2*mod_->r_*opt_->T_)*((1/nbSamples_)*esp_carre-pow((1/nbSamples_)*prix,2));
     prix *= exp(-mod_->r_*opt_->T_)*(1/nbSamples_);
-    ic = 1.96 * estimateur/sqrt(nbSamples_);
+    ic = 2*1.96 * estimateur/sqrt(nbSamples_);
     //ic = 2 * 1.96 * sqrt(estimateur/nbSamples_);
 }
 
@@ -38,5 +38,5 @@ void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic){
     }
     double estimateur = exp(-2*mod_->r_*opt_->T_)*((1/nbSamples_)*esp_carre-pow((1/nbSamples_)*prix,2));
     prix *= exp(-mod_->r_*opt_->T_)*(1/nbSamples_);
-    ic = 1.96 * estimateur/sqrt(nbSamples_);
+    ic = 2*1.96 * estimateur/sqrt(nbSamples_);
 }

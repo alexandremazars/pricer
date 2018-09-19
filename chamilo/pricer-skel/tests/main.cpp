@@ -2,7 +2,8 @@
 // Created by teukengd on 9/19/18.
 //
 #include <gtest/gtest.h>
-#include "test_asset.hpp"
+#include "test_payoff.hpp"
+#include "test_exemple.hpp"
 
 int main(int argc,char *argv[]) {
     ::testing::InitGoogleTest(&argc,argv);

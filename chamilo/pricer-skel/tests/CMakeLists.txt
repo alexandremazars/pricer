@@ -4,6 +4,6 @@
 
 #include_directories("${PROJECT_SOURCE_DIR}")
 # First Simple Google Test
-add_executable(test main.cpp ../src/BlackScholesModel.cpp ${SOURCESTEST} ${HEADERSTEST})
+add_executable(test main.cpp ${SOURCESTEST} ${HEADERSTEST})
 target_link_libraries(test gtest gtest_main ${LIBS})
 #add_test(NAME test COMMAND simple)
