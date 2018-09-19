@@ -2,8 +2,8 @@
 #target_link_libraries(MonteCarlo PUBLIC libsrc PUBLIC gtest)
 
 
-include_directories("${PROJECT_SOURCE_DIR}")
+#include_directories("${PROJECT_SOURCE_DIR}")
 # First Simple Google Test
-add_executable(test main.cpp test_payoff.cpp)
-target_link_libraries(test gtest gmock_main)
-###add_test(NAME test COMMAND simple)
+add_executable(test main.cpp ../src/BlackScholesModel.cpp ${SOURCESTEST} ${HEADERSTEST})
+target_link_libraries(test gtest gtest_main ${LIBS})
+#add_test(NAME test COMMAND simple)
