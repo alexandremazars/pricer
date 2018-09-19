@@ -37,12 +37,14 @@ TEST(MonteCarlo, Asian0){
     Option *aOption = new AsianOption(T, timestep, size, strike);
     PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
-    MonteCarlo *mCarlo = new MonteCarlo(bsmodel, aOption, rng, fdStep, n_samples);
+    MonteCarlo *mCarlo = new MonteCarlo(bsmodel, aOption, rng, fdStep, 2);
     double prix = 0.0;
     double ic = 0.0;
     mCarlo->price(prix , ic);
-    /*ASSERT_LE(prix - ic, 4.67) << "Error, price at t=0 not in confidence interval, too low";
-    ASSERT_GE(prix + ic, 4.67) << "Error, price at t=0 not in confidence interval, too high";*/
+    printf("%f\n", prix);
+    printf("%f\n", ic);
+    ASSERT_LE(prix - ic, 4.67) << "Error, price at t=0 not in confidence interval, too low";
+    ASSERT_GE(prix + ic, 4.67) << "Error, price at t=0 not in confidence interval, too high";
 }
 
 

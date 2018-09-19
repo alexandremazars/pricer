@@ -3,6 +3,7 @@
 //
 
 #include "MonteCarlo.hpp"
+using namespace std;
 
 MonteCarlo::MonteCarlo(BlackScholesModel *mod, Option *opt, PnlRng *rng, double fdStep, int nbSamples){
     mod_ = mod;
@@ -21,14 +22,15 @@ void MonteCarlo::price(double &prix, double &ic){
     prix = 0;
     PnlMat *path;
     double esp_carre; //premier membre pour calculer la variance
+    path = pnl_mat_create(opt_->nbTimeSteps_ + 1, mod_->size_);
     for (size_t j = 0; j < nbSamples_; ++j) {
         mod_->asset(path, opt_->T_, opt_->nbTimeSteps_, rng_);
         prix += opt_->payoff(path);
         esp_carre += pow((opt_->payoff(path)),2);
     }
-    double estimateur = exp(-2*mod_->r_*opt_->T_)*((1/nbSamples_)*esp_carre-pow((1/nbSamples_)*prix,2));
-    prix *= exp(-mod_->r_*opt_->T_)*(1/nbSamples_);
-    ic = 2*1.96 * estimateur/sqrt(nbSamples_);
+    double estimateur = exp(-2*mod_->r_*opt_->T_)*(esp_carre-pow(prix/nbSamples_,2)/nbSamples_);
+    prix *= exp(-mod_->r_*opt_->T_)/nbSamples_;
+    ic = 1.96 * estimateur/sqrt(nbSamples_);
 }
 
 

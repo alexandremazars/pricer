@@ -22,7 +22,8 @@ BlackScholesModel::BlackScholesModel(int size, double r, double rho, PnlVect *si
      */
 void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng)
 {
-    double delta_t = (nbTimeSteps + 1)/T;
+    double delta_t = T / nbTimeSteps;
+    printf("delta_t: %f\n", delta_t);
 
     //Remplir la mtrice de correlation
     PnlMat *mat_Cor = pnl_mat_create_from_scalar(size_, size_, rho_ );
@@ -33,8 +34,6 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *r
     //Matrice de Cholesky
     PnlMat *mat_Chol = pnl_mat_copy(mat_Cor);
     pnl_mat_chol(mat_Chol);
-
-    path = pnl_mat_create(nbTimeSteps + 1, size_);
 
     //Simuler vecteurs gaussiens
     PnlMat *suite_Gauss = pnl_mat_create(nbTimeSteps + 1, size_);
@@ -47,10 +46,10 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *r
         pnl_mat_set_col(suite_Gauss, G, d);
     }
 
-
     //Calcul des prix
     PnlVect *col_Chol = pnl_vect_create(size_);
     PnlVect *row_Gauss = pnl_vect_create(size_);
+    double produitScalaire;
     for (int d = 0; d < size_ ; ++d) {
         double prix_Prec = pnl_vect_get(spot_, d);
         double prix = prix_Prec;
@@ -59,12 +58,14 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *r
         pnl_mat_get_col(col_Chol, mat_Chol, d);
         for (int i = 1; i < nbTimeSteps+1; ++i) {
             pnl_mat_get_row(row_Gauss, suite_Gauss, i);
-            pnl_vect_mult_vect_term(col_Chol, row_Gauss);
-            prix = prix_Prec * exp((r_-(pow(sigma,2))/2)/delta_t + pnl_vect_get(col_Chol, 0) * sigma * sqrt(delta_t));
+            produitScalaire = pnl_vect_scalar_prod(row_Gauss, col_Chol);
+            prix = prix_Prec * exp((r_-(pow(sigma,2))/2)*delta_t + produitScalaire * sigma * sqrt(delta_t));
             pnl_mat_set(path, i, d, prix);
             prix_Prec = prix;
         }
     }
+    printf("\n");
+    pnl_mat_print(path);
 
     // Free
     pnl_vect_free(&col_Chol);
@@ -73,11 +74,10 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *r
     pnl_mat_free(&mat_Chol);
     pnl_mat_free(&mat_Cor);
     pnl_vect_free(&G);
-    pnl_rng_free(&rng);
 }
 
 void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past){
-    double delta_t = (nbTimeSteps + 1)/T;
+    double delta_t = T / nbTimeSteps;
     //Remplir la mtrice de correlation
     PnlMat *mat_Cor = pnl_mat_create_from_scalar(size_, size_, rho_ );
     for (int i = 0; i < size_; ++i) {
@@ -142,6 +142,4 @@ void BlackScholesModel::shiftAsset(PnlMat *shift_path, const PnlMat *path, int d
     for (int i = nbSteps + 1; i < nbTimeSteps; i++) {
       pnl_mat_set(shift_path, i , d, (1+h) * pnl_mat_get(path, i , d));
     }
-
-
 }
