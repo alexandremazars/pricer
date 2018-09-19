@@ -11,7 +11,8 @@ TEST(MonteCarlo, Price){
     EXPECT_EQ(,) << "Error : message d'erreur";
 }
 
-int main(int argc, char **argv){
+int main(int argc, char **argv)
+
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
