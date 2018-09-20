@@ -40,7 +40,6 @@ TEST(BasketOption, BasketOption2dPos){
     PnlMat *basketPath = pnl_mat_create_from_file(file);
     BasketOption *basket  = new BasketOption(1, 365, 2, 100);
     double result = basket->payoff(basketPath);
-    cout << result << endl;
     ASSERT_TRUE(result >= 15.614674 - 0.0001 && result <= 15.614674 + 0.0001);
 }
 
