@@ -38,8 +38,8 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *r
     //Simuler vecteurs gaussiens
     PnlMat *suite_Gauss = pnl_mat_create(nbTimeSteps + 1, size_);
     PnlVect *G = pnl_vect_new();
-    pnl_rng_init(rng, PNL_RNG_MERSENNE);
-    pnl_rng_sseed(rng, time(NULL));
+    //pnl_rng_init(rng, PNL_RNG_MERSENNE);
+    //pnl_rng_sseed(rng, time(NULL));
     for (int d = 0; d < size_; ++d) {
         G = pnl_vect_new();
         pnl_vect_rng_normal(G, nbTimeSteps + 1, rng);

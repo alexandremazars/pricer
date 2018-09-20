@@ -35,7 +35,9 @@ TEST(MonteCarlo, Asian0){
 
     BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot);
     Option *aOption = new AsianOption(T, timestep, size, strike);
-    PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
+    PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
+    //
+    pnl_rng_init(rng, PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
     MonteCarlo *mCarlo = new MonteCarlo(bsmodel, aOption, rng, fdStep, n_samples);
     double prix = 0.0;
