@@ -50,7 +50,8 @@ void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic){
 }
 
 void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, const PnlVect *conf_delta){
-    pnl_vect_resize(delta, mod_->size_);
+
+    delta = pnl_vect_create(mod_->size_);
 
     int timestep = (opt_->nbTimeSteps_+1)/opt_->T_;
     int sum = 0;
@@ -59,9 +60,9 @@ void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, const PnlVe
     price(past, t, prix, ic);
     double coefficient = exp(-mod_->r_ * (opt_->T_ - t))/(2 * nbSamples_ * fdStep_ * prix);
 
-    PnlMat *path;
-    PnlMat *increment_path;
-    PnlMat *decrement_path;
+    PnlMat *path = pnl_mat_create(opt_->nbTimeSteps_ + 1, mod_->size_);
+    PnlMat *increment_path = pnl_mat_create(opt_->nbTimeSteps_ + 1, mod_->size_);
+    PnlMat *decrement_path = pnl_mat_create(opt_->nbTimeSteps_ + 1, mod_->size_);
 
     for (int d = 0; d < mod_->size_; d++) {
       for (size_t i = 0; i < nbSamples_; i++) {
@@ -69,8 +70,6 @@ void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, const PnlVe
         mod_->shiftAsset(increment_path, path, d, fdStep_, t, timestep);
         mod_->shiftAsset(decrement_path, path, d, -fdStep_, t, timestep);
         sum += opt_->payoff(increment_path) - opt_->payoff(decrement_path);
-        mod_->asset(increment_path, t, opt_->T_, opt_->nbTimeSteps_, rng_, past);
-        mod_->asset(decrement_path, t, opt_->T_, opt_->nbTimeSteps_, rng_, past);
       }
       pnl_vect_set(delta, d, coefficient * sum);
     }
