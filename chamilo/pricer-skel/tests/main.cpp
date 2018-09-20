@@ -7,6 +7,7 @@
 #include "asian_test_price0.hpp"
 #include "basket_test_price0.hpp"
 #include "basket1_test_price0.hpp"
+#include "basket2_test_price0.hpp"
 #include "perf_test_price0.hpp"
 
 int main(int argc,char *argv[]) {

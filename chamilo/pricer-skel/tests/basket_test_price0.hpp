@@ -1,9 +1,7 @@
-#ifndef CHAMILO_TEST_ASIAN_PRICE0
-#define CHAMILO_TEST_ASIAN_PRICE0
+#ifndef CHAMILO_TEST_BASKET_PRICE0
+#define CHAMILO_TEST_BASKET_PRICE0
 #include <gtest/gtest.h>
 #include "jlparser/parser.hpp"
-#include "../src/BlackScholesModel.cpp"
-#include "../src/MonteCarlo.cpp"
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 
@@ -51,4 +49,4 @@ TEST(MonteCarlo, Basket0){
 }
 
 
-#endif //CHAMILO_TEST_ASIAN_PRICE0
+#endif //CHAMILO_TEST_BASKET_PRICE0
