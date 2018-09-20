@@ -21,16 +21,17 @@ MonteCarlo::MonteCarlo(BlackScholesModel *mod, Option *opt, PnlRng *rng, double 
 void MonteCarlo::price(double &prix, double &ic){
     prix = 0;
     PnlMat *path;
-    double esp_carre; //premier membre pour calculer la variance
+    double esp_carre = 0; //premier membre pour calculer la variance
     path = pnl_mat_create(opt_->nbTimeSteps_ + 1, mod_->size_);
     for (size_t j = 0; j < nbSamples_; ++j) {
         mod_->asset(path, opt_->T_, opt_->nbTimeSteps_, rng_);
         prix += opt_->payoff(path);
         esp_carre += pow((opt_->payoff(path)),2);
     }
-    double estimateur = exp(-2*mod_->r_*opt_->T_)*(esp_carre/nbSamples_-pow(prix/nbSamples_,2));
+    double estimateur_carre = exp(-2*mod_->r_*opt_->T_)*(esp_carre/nbSamples_-pow(prix/nbSamples_,2));
+    printf("estimateur %f\n",sqrt(estimateur_carre));
     prix *= exp(-mod_->r_*opt_->T_)/nbSamples_;
-    ic = 1.96 * estimateur/sqrt(nbSamples_);
+    ic = 1.96 * sqrt(estimateur_carre/nbSamples_);
 }
 
 
