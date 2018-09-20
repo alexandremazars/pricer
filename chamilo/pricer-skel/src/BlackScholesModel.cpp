@@ -23,7 +23,6 @@ BlackScholesModel::BlackScholesModel(int size, double r, double rho, PnlVect *si
 void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng)
 {
     double delta_t = T / nbTimeSteps;
-    printf("delta_t: %f\n", delta_t);
 
     //Remplir la mtrice de correlation
     PnlMat *mat_Cor = pnl_mat_create_from_scalar(size_, size_, rho_ );
@@ -64,8 +63,6 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *r
             prix_Prec = prix;
         }
     }
-    printf("\n");
-    pnl_mat_print(path);
 
     // Free
     pnl_vect_free(&col_Chol);

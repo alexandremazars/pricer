@@ -37,7 +37,7 @@ TEST(MonteCarlo, Asian0){
     Option *aOption = new AsianOption(T, timestep, size, strike);
     PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
-    MonteCarlo *mCarlo = new MonteCarlo(bsmodel, aOption, rng, fdStep, 2);
+    MonteCarlo *mCarlo = new MonteCarlo(bsmodel, aOption, rng, fdStep, n_samples);
     double prix = 0.0;
     double ic = 0.0;
     mCarlo->price(prix , ic);
