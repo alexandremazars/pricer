@@ -24,7 +24,7 @@ double rho = 0;
 PnlVect *sigma = pnl_vect_create_from_scalar(size,0.200000);
 PnlVect *spot = pnl_vect_create_from_scalar(size,100.000000);
 
-double T = 1.000000;
+double T = 2.000000;
 int nbTimeSteps = 365;
 double strike = 100;
 
@@ -38,15 +38,23 @@ Option *call = new CallOption(T, nbTimeSteps, size, strike);
 pnl_rng_init(rng, PNL_RNG_MERSENNE);
 pnl_rng_sseed(rng, time(NULL));
 
-MonteCarlo *mCarlo = new MonteCarlo(bsmodel, call, rng, fdStep, n_samples);
+MonteCarlo *mCarlo = new MonteCarlo(bsmodel, call, rng, fdStep, 1);
 
 double prix = 0.0;
 double ic = 0.0;
-double t = 30;
-PnlMat *past = pnl_mat_create(t, size);
-pnl_mat_extract_subblock(past, callPath, 0, t+1, 0, size);
+double t = 0.1;
+double step = floor(t * nbTimeSteps / T) + 1;
+PnlMat *past = pnl_mat_create(step, size);
+pnl_mat_extract_subblock(past, callPath, 0, step,  0, size);
+//pnl_mat_print(past);
+mCarlo->price(past, t, prix, ic);
+printf("prix t: %f\n",prix );
 
-//mCarlo->price(past, t, prix, ic);
+Option *call2  = new CallOption(T - t, nbTimeSteps, size, strike);
+MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel, call2, rng, fdStep, 1);
+mCarlo2->price(prix, ic);
+printf("prix 0: %f\n",prix );
+
 /*
 ASSERT_LE(prix - ic, 4.67) << "Error, price at t=0 not in confidence interval, too low";
 ASSERT_GE(prix + ic, 4.67) << "Error, price at t=0 not in confidence interval, too high";
