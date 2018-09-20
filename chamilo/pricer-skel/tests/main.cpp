@@ -11,6 +11,7 @@
 #include "perf_test_price0.hpp"
 #include "call_test_price_t.hpp"
 #include "asian_test_delta0.hpp"
+#include "test_price_t.hpp"
 
 int main(int argc,char *argv[]) {
     ::testing::InitGoogleTest(&argc,argv);

@@ -13,7 +13,7 @@ TEST(MonteCarlo, Performance){
     int size, timestep;
     size_t n_samples;
 
-    const char *infile = "../data/basket_1.dat";
+    const char *infile = "../data/perf.dat";
     Param *P = new Parser(infile);
 
     P->extract("option type", type);
