@@ -1,5 +1,5 @@
-#ifndef CHAMILO_TEST_ASIAN_DELTA0
-#define CHAMILO_TEST_ASIAN_DELTA0
+#ifndef CHAMILO_TEST_BASKET_DELTA0
+#define CHAMILO_TEST_BASKET_DELTA0
 #include <gtest/gtest.h>
 #include "jlparser/parser.hpp"
 #include "pnl/pnl_random.h"
@@ -7,7 +7,7 @@
 #include "pnl/pnl_matrix.h"
 
 
-TEST(MonteCarlo, AsianDelta0){
+TEST(MonteCarlo, BasketDelta0){
     double fdStep = 0.1;
     double T, r, strike, correlation;
     PnlVect *spot, *sigma, *divid;
@@ -15,7 +15,7 @@ TEST(MonteCarlo, AsianDelta0){
     int size, timestep;
     size_t n_samples;
 
-    const char *infile = "../data/asian.dat";
+    const char *infile = "../data/basket.dat";
     Param *P = new Parser(infile);
 
     P->extract("option type", type);
@@ -34,12 +34,12 @@ TEST(MonteCarlo, AsianDelta0){
     P->extract("sample number", n_samples);
 
     BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot);
-    Option *aOption = new AsianOption(T, timestep, size, strike);
+    Option *bOption = new BasketOption(T, timestep, size, strike);
     PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
     //
     pnl_rng_init(rng, PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
-    MonteCarlo *mCarlo = new MonteCarlo(bsmodel, aOption, rng, fdStep, n_samples);
+    MonteCarlo *mCarlo = new MonteCarlo(bsmodel, bOption, rng, fdStep, n_samples);
 
     PnlMat *past = pnl_mat_create(1, 2);
     pnl_mat_set(past, 0, 0, 100.0);
