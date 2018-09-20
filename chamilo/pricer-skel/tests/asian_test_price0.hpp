@@ -45,7 +45,7 @@ TEST(MonteCarlo, Asian0){
     mCarlo->price(prix , ic);
     ASSERT_LE(prix - ic, 4.67) << "Error, price at t=0 not in confidence interval, too low";
     ASSERT_GE(prix + ic, 4.67) << "Error, price at t=0 not in confidence interval, too high";
-    ASSERT_TRUE(ic / 1.96 >= 0.029 - 0.0001 && ic / 1.96 <= 0.29 + 0.0001);
+    ASSERT_TRUE(ic / 1.96 >= 0.029 - 0.0001 && ic / 1.96 <= 0.029 + 0.0001);
 }
 
 
