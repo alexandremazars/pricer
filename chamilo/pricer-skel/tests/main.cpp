@@ -5,6 +5,9 @@
 #include "test_payoff.hpp"
 #include "test_exemple.hpp"
 #include "asian_test_price0.hpp"
+#include "basket_test_price0.hpp"
+#include "basket1_test_price0.hpp"
+#include "perf_test_price0.hpp"
 
 int main(int argc,char *argv[]) {
     ::testing::InitGoogleTest(&argc,argv);
