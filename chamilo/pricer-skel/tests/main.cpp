@@ -10,6 +10,7 @@
 #include "basket2_test_price0.hpp"
 #include "perf_test_price0.hpp"
 #include "call_test_price_t.hpp"
+#include "asian_test_delta0.hpp"
 
 int main(int argc,char *argv[]) {
     ::testing::InitGoogleTest(&argc,argv);

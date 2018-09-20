@@ -14,7 +14,7 @@ public:
     double fdStep_; /*! pas de différence finie */
     size_t nbSamples_; /*! nombre de tirages Monte Carlo */
 
-    MonteCarlo(BlackScholesModel *mod, Option *opt, PnlRng *rng, double fdStep, int nbSamples);
+    MonteCarlo(BlackScholesModel *mod, Option *opt, PnlRng *rng, double fdStep = 0.1, int nbSamples);
 
     /**
      * Calcule le prix de l'option à la date 0
