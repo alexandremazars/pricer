@@ -43,8 +43,9 @@ TEST(MonteCarlo, Basket1){
     mCarlo->price(prix , ic);
     ASSERT_LE(prix - ic, 13.616294) << "Error, price at t=0 not in confidence interval, too low";
     ASSERT_GE(prix + ic, 13.616294) << "Error, price at t=0 not in confidence interval, too high";
-    printf("ic %f \n", (pow(ic,2) * n_samples / pow(1.96,2)));
-    //ASSERT_TRUE((pow(ic,2) * n_samples / pow(1.96,2)) >= 32.053411 - 0.5 && (pow(ic,2) * n_samples / pow(1.96,2)) <= 32.053411 + 0.5);
+    //printf("ic carr %f \n", (pow(ic,2) * n_samples) / pow(1.96,2));
+    //printf("ecar rel %f \n", (((pow(ic,2) * n_samples) / pow(1.96,2))-32.053411)/32.053411);
+    ASSERT_TRUE(abs((((pow(ic,2) * n_samples) / pow(1.96,2))-32.053411)/32.053411)<=0.05); // ecart relatif inf a 5%
 }
 
 
