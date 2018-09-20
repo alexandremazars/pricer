@@ -28,7 +28,7 @@ void MonteCarlo::price(double &prix, double &ic){
         prix += opt_->payoff(path);
         esp_carre += pow((opt_->payoff(path)),2);
     }
-    double estimateur = exp(-2*mod_->r_*opt_->T_)*(esp_carre-pow(prix/nbSamples_,2)/nbSamples_);
+    double estimateur = exp(-2*mod_->r_*opt_->T_)*(esp_carre/nbSamples_-pow(prix/nbSamples_,2));
     prix *= exp(-mod_->r_*opt_->T_)/nbSamples_;
     ic = 1.96 * estimateur/sqrt(nbSamples_);
 }
