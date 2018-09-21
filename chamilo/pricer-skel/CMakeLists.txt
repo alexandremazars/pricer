@@ -77,4 +77,4 @@ add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src)
 include_directories("${PROJECT_SOURCE_DIR}")
 
 add_subdirectory(tests)
-add_test(NAME test COMMAND test)
+add_test(NAME test1 COMMAND test1)
