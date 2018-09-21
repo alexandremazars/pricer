@@ -33,6 +33,8 @@ void MonteCarlo::price(double &prix, double &ic){
     double estimateur_carre = exp(-2*mod_->r_*opt_->T_)*(esp_carre/nbSamples_-pow(prix/nbSamples_,2));
     prix *= exp(-mod_->r_*opt_->T_)/nbSamples_;
     ic = 1.96 * sqrt(estimateur_carre/nbSamples_);
+
+    pnl_mat_free(&path);
 }
 
 
@@ -51,6 +53,8 @@ void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic){
     double estimateur_carre = exp(-2*mod_->r_*opt_->T_)*(esp_carre/nbSamples_-pow(prix/nbSamples_,2));
     prix *= exp(-mod_->r_*opt_->T_)/nbSamples_;
     ic = 1.96 * sqrt(estimateur_carre/nbSamples_);
+
+    pnl_mat_free(&path);
 }
 
 void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *conf_delta){

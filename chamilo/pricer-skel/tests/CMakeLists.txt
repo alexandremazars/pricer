@@ -1,11 +1,20 @@
-#add_executable(MonteCarlo test_mc_price.cpp)
-#target_link_libraries(MonteCarlo PUBLIC libsrc PUBLIC gtest)
 
-
-#include_directories("${PROJECT_SOURCE_DIR}")
-# First Simple Google Test
 add_executable(test main.cpp ${SOURCESTEST} ${HEADERSTEST})
 target_link_libraries(test gtest gtest_main ${LIBS})
 target_link_libraries(test jl_parser ${LIBS})
 
-#add_test(NAME test COMMAND simple)
+add_executable(payoff main_payoff.cpp ${SOURCESTEST} ${HEADERSTEST})
+target_link_libraries(payoff gtest gtest_main ${LIBS})
+target_link_libraries(payoff jl_parser ${LIBS})
+
+add_executable(price_0 main_price_0.cpp ${SOURCESTEST} ${HEADERSTEST})
+target_link_libraries(price_0 gtest gtest_main ${LIBS})
+target_link_libraries(price_0 jl_parser ${LIBS})
+
+add_executable(price_t main_price_t.cpp ${SOURCESTEST} ${HEADERSTEST})
+target_link_libraries(price_t gtest gtest_main ${LIBS})
+target_link_libraries(price_t jl_parser ${LIBS})
+
+add_executable(delta main_delta.cpp ${SOURCESTEST} ${HEADERSTEST})
+target_link_libraries(delta gtest gtest_main ${LIBS})
+target_link_libraries(delta jl_parser ${LIBS})

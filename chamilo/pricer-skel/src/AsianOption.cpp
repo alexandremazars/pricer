@@ -4,8 +4,6 @@
 
 #include "AsianOption.hpp"
 
-using namespace std;
-
 AsianOption::AsianOption(double T, int nbTimeSteps, int size, double strike){
     T_ = T;
     nbTimeSteps_ = nbTimeSteps;

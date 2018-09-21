@@ -47,6 +47,15 @@ TEST(MonteCarlo, Basket2_price_0){
     //printf("ic carr %f \n", (pow(ic,2) * n_samples) / pow(1.96,2));
     //printf("ecar rel %f \n", (((pow(ic,2) * n_samples) / pow(1.96,2))-152.094852)/152.094852);
     ASSERT_TRUE(abs((((pow(ic,2) * n_samples) / pow(1.96,2))-152.094852)/152.094852)<=0.05); // ecart relatif inf a 5%
+
+    pnl_vect_free(&spot);
+    pnl_vect_free(&sigma);
+    pnl_vect_free(&divid);
+    pnl_rng_free(&rng);
+    delete P;
+    delete bsmodel;
+    delete bOption;
+    delete mCarlo;
 }
 
 
