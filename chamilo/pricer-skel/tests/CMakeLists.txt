@@ -8,4 +8,4 @@ add_executable(test1 main.cpp ${SOURCESTEST} ${HEADERSTEST})
 target_link_libraries(test1 gtest gtest_main ${LIBS})
 target_link_libraries(test1 jl_parser ${LIBS})
 
-#add_test(NAME test COMMAND simple)
+#add_test(NAME test1 COMMAND simple)
