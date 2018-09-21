@@ -41,27 +41,27 @@ TEST(MonteCarlo, Basket1Delta0){
     pnl_rng_sseed(rng, time(NULL));
     MonteCarlo *mCarlo = new MonteCarlo(bsmodel, bOption, rng, fdStep, n_samples);
 
-    const char *infile2 = "../data/basket_1_delta.dat";
-    const PnlMat *past = pnl_mat_create_from_file(infile2);
+    PnlMat *past = pnl_mat_create_from_scalar(1, size, 100);
 
-    PnlVect *delta = pnl_vect_create(40);
-    PnlVect *conf_delta = pnl_vect_create(40);
+    const char *infile2 = "../data/basket_1_delta.dat";
+    const PnlVect *delta_attendu = pnl_vect_create_from_file(infile2);
+
+    PnlVect *delta = pnl_vect_create(size);
+    PnlVect *conf_delta = pnl_vect_create(size);
     
     mCarlo->delta(past, 0, delta, conf_delta);
-    
     int good_sum = 0;
     double ic = 0;
-    pnl_vect_print(delta);
-    pnl_vect_print(conf_delta);
-    /*for (int i =0; i < size; i ++){
-        ic = pnl_vect_get(conf_delta, i);
-        ASSERT_LE(pnl_mat_get(past, 1, i) - ic, GET(delta, i)) << "Error, delta of first option not in confidence interval, too low";
-        ASSERT_GE(pnl_mat_get(past, 1, i) + ic, GET(delta, i)) << "Error, delta of first option not in confidence interval, too high";
-        if (pnl_mat_get(past, 1, i) - ic <= GET(delta, i) <= pnl_mat_get(past, 1, i) + ic) {
+    for (int i =0; i < size; i ++){
+        printf("Delta actif %u: %f\n", i+1, pnl_vect_get(delta, i));
+        printf("Standard Deviation actif %u: %f\n", i+1, pnl_vect_get(conf_delta, i));
+        /*ic = pnl_vect_get(conf_delta, i);
+        ASSERT_LE(pnl_vect_get(delta_attendu, i) - ic, GET(delta, i)) << "Error, delta of first option not in confidence interval, too low";
+        ASSERT_GE(pnl_vect_get(delta_attendu, i) + ic, GET(delta, i)) << "Error, delta of first option not in confidence interval, too high";
+        if (pnl_vect_get(delta_attendu, i) - ic <= GET(delta, i) && GET(delta, i) <= pnl_vect_get(delta_attendu, i) + ic) {
             good_sum +=1;
-        }
-    }*/
-    printf ("Nombre de deltas réussis : %i/%i", good_sum, size);
+        }*/
+    }
     //pnl_mat_free(&past);
     pnl_vect_free(&delta);
     pnl_vect_free(&conf_delta);

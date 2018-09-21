@@ -25,15 +25,13 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *r
     double delta_t = T / nbTimeSteps;
 
     //Remplir la matrice de correlation
-    PnlMat *mat_Cor = pnl_mat_create_from_scalar(size_, size_, rho_ );
+    PnlMat *mat_Chol = pnl_mat_create_from_scalar(size_, size_, rho_ );
     for (int i = 0; i < size_; ++i) {
-        pnl_mat_set(mat_Cor, i, i, 1);
+        pnl_mat_set(mat_Chol, i, i, 1);
     }
 
     //Matrice de Cholesky
-    PnlMat *mat_Chol = pnl_mat_copy(mat_Cor);
     pnl_mat_chol(mat_Chol);
-
 
     //Simuler vecteurs gaussiens
     PnlMat *suite_Gauss = pnl_mat_create(nbTimeSteps + 1, size_);
@@ -70,7 +68,6 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *r
     pnl_vect_free(&row_Gauss);
     pnl_mat_free(&suite_Gauss);
     pnl_mat_free(&mat_Chol);
-    pnl_mat_free(&mat_Cor);
     pnl_vect_free(&G);
 }
 
@@ -79,13 +76,12 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
     double delta_t = T / nbTimeSteps;
 
     //Remplir la mtrice de correlation
-    PnlMat *mat_Cor = pnl_mat_create_from_scalar(size_, size_, rho_ );
+    PnlMat *mat_Chol = pnl_mat_create_from_scalar(size_, size_, rho_ );
     for (int i = 0; i < size_; ++i) {
-        pnl_mat_set(mat_Cor, i, i, 1);
+        pnl_mat_set(mat_Chol, i, i, 1);
     }
 
     //Matrice de Cholesky
-    PnlMat *mat_Chol = pnl_mat_copy(mat_Cor);
     pnl_mat_chol(mat_Chol);
 
     //nbSteps correspondant
@@ -99,7 +95,6 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
       nbSteps += 2 ;
       a = 1;
     }
-    //double nbSteps = floor(t * nbTimeSteps / T) + 1;
 
     //simuler les vecteurs gaussien
     PnlMat *suite_Gauss = pnl_mat_create(nbTimeSteps - nbSteps + 2 + a, size_);
@@ -139,16 +134,14 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
             cours_prec = cours;
             pnl_mat_set(path, (i - 1 + nbSteps - a), d, prix);
         }
-        //printf("prix %f\n",prix );
     }
 
     // Free
-    //pnl_vect_free(&price_i);
+    pnl_vect_free(&price_i);
     pnl_vect_free(&row_Chol);
     pnl_mat_free(&mat_Chol);
     pnl_vect_free(&row_Gauss);
     pnl_mat_free(&suite_Gauss);
-    pnl_mat_free(&mat_Cor);
     pnl_vect_free(&G);
 }
 
