@@ -60,7 +60,6 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *r
             prix_Prec = prix;
         }
     }
-
     pnl_vect_free(&row_Chol);
     pnl_vect_free(&row_Gauss);
     pnl_mat_free(&suite_Gauss);
