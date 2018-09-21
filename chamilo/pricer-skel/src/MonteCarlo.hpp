@@ -48,4 +48,13 @@ public:
      * de confiance sur le calcul du delta
      */
     void delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *conf_delta);
+    /**
+     * Calcule le prix de l'option tout instant donnée
+     *
+     * @param[out] listPrice contient le prix des options à differents instants
+     * @param[in] marketPrice contient la disposition des trajectoires de marché
+     */
+    void listPrice(PnlVect *listPrice, PnlMat *marketPrice, int H, int size);
+    void matDelta(PnlMat *matDelta,PnlMat *marketPrice, int H, int size);
+    void listHedge(PnlMat *listHedge,PnlMat *marketPrice);
 };
