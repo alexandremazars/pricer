@@ -47,6 +47,7 @@ TEST(MonteCarlo, Basket2){
     //printf("ic carr %f \n", (pow(ic,2) * n_samples) / pow(1.96,2));
     //printf("ecar rel %f \n", (((pow(ic,2) * n_samples) / pow(1.96,2))-152.094852)/152.094852);
     ASSERT_TRUE(abs((((pow(ic,2) * n_samples) / pow(1.96,2))-152.094852)/152.094852)<=0.05); // ecart relatif inf a 5%
+    delete P;
 }
 
 

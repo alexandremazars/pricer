@@ -64,6 +64,7 @@ TEST(MonteCarlo, BasketDelta0){
     pnl_mat_free(&past);
     pnl_vect_free(&delta);
     pnl_vect_free(&conf_delta);
+    delete P;
 }
 
 

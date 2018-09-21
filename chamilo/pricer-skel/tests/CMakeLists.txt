@@ -4,8 +4,8 @@
 
 #include_directories("${PROJECT_SOURCE_DIR}")
 # First Simple Google Test
-add_executable(test main.cpp ${SOURCESTEST} ${HEADERSTEST})
-target_link_libraries(test gtest gtest_main ${LIBS})
-target_link_libraries(test jl_parser ${LIBS})
+add_executable(test1 main.cpp ${SOURCESTEST} ${HEADERSTEST})
+target_link_libraries(test1 gtest gtest_main ${LIBS})
+target_link_libraries(test1 jl_parser ${LIBS})
 
 #add_test(NAME test COMMAND simple)
