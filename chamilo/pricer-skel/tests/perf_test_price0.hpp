@@ -31,18 +31,27 @@ TEST(MonteCarlo, Performance_price_0){
     P->extract("sample number", n_samples);
 
     BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot);
-    Option *bOption = new PerformanceOption(T, timestep, size);
+    Option *pOption = new PerformanceOption(T, timestep, size);
     PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
     //
     pnl_rng_init(rng, PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
-    MonteCarlo *mCarlo = new MonteCarlo(bsmodel, bOption, rng, fdStep, n_samples);
+    MonteCarlo *mCarlo = new MonteCarlo(bsmodel, pOption, rng, fdStep, n_samples);
     double prix = 0.0;
     double ic = 0.0;
     mCarlo->price(prix , ic);
     ASSERT_LE(1.257353 - ic, prix) << "Error, price at t=0 not in confidence interval, too low";
     ASSERT_GE(1.257353 + ic, prix) << "Error, price at t=0 not in confidence interval, too high";
     ASSERT_TRUE(abs(ic / 1.96 - 0.000587)/0.000587 <= 0.05); // erreur relative inf a 5%
+
+    pnl_vect_free(&spot);
+    pnl_vect_free(&sigma);
+    pnl_vect_free(&divid);
+    pnl_rng_free(&rng);
+    delete P;
+    delete bsmodel;
+    delete pOption;
+    delete mCarlo;
 }
 
 

@@ -8,11 +8,8 @@
 #define CHAMILO_TEST_ASSET_H
 #include <gtest/gtest.h>
 #include "pnl/pnl_matrix.h"
-#include <fstream>
-#include <iostream>
 
 
-using namespace std;
 
 TEST(CallOption, callOptionPos){
     //PnlMat *callPath = pnl_mat_create_from_file("../../market-data/simul_call.dat");
@@ -21,6 +18,9 @@ TEST(CallOption, callOptionPos){
     CallOption *call  = new CallOption(1, 365, 1,98);
     double result = call->payoff(callPath);
     ASSERT_TRUE(result >= 16.088379 - 0.0001 && result <= 16.088379 + 0.0001);
+
+    pnl_mat_free(&callPath);
+    delete call;
 }
 
 TEST(CallOption, callOptionNul){
@@ -29,6 +29,9 @@ TEST(CallOption, callOptionNul){
     CallOption *call  = new CallOption(1, 365, 1,118);
     double result = call->payoff(callPath);
     ASSERT_EQ(result, 0);
+
+    pnl_mat_free(&callPath);
+    delete call;
 }
 
 TEST(BasketOption, BasketOption2dPos){
@@ -37,6 +40,9 @@ TEST(BasketOption, BasketOption2dPos){
     BasketOption *basket  = new BasketOption(1, 365, 2, 100);
     double result = basket->payoff(basketPath);
     ASSERT_TRUE(result >= 15.614674 - 0.0001 && result <= 15.614674 + 0.0001);
+
+    pnl_mat_free(&basketPath);
+    delete basket;
 }
 
 TEST(BasketOption, BasketOption2dNul){
@@ -45,22 +51,31 @@ TEST(BasketOption, BasketOption2dNul){
     BasketOption *basket  = new BasketOption(1, 365, 2, 120);
     double result = basket->payoff(basketPath);
     ASSERT_EQ(result,0);
+
+    pnl_mat_free(&basketPath);
+    delete basket;
 }
 
 TEST(BasketOption, BasketOptionPos){
-const char *file = "../../market-data/simul_basket.dat";
-PnlMat *basketPath = pnl_mat_create_from_file(file);
-BasketOption *basket  = new BasketOption(1, 365, 5, 100);
-double result = basket->payoff(basketPath);
-ASSERT_TRUE(result >= 3.4349628 - 0.0001 && result <= 3.4349628 + 0.0001);
+    const char *file = "../../market-data/simul_basket.dat";
+    PnlMat *basketPath = pnl_mat_create_from_file(file);
+    BasketOption *basket  = new BasketOption(1, 365, 5, 100);
+    double result = basket->payoff(basketPath);
+    ASSERT_TRUE(result >= 3.4349628 - 0.0001 && result <= 3.4349628 + 0.0001);
+
+    pnl_mat_free(&basketPath);
+    delete basket;
 }
 
 TEST(BasketOption, BasketOptionNul){
-const char *file = "../../market-data/simul_basket.dat";
-PnlMat *basketPath = pnl_mat_create_from_file(file);
-BasketOption *basket  = new BasketOption(1, 365, 5, 110);
-double result = basket->payoff(basketPath);
-ASSERT_EQ(result,0);
+    const char *file = "../../market-data/simul_basket.dat";
+    PnlMat *basketPath = pnl_mat_create_from_file(file);
+    BasketOption *basket  = new BasketOption(1, 365, 5, 110);
+    double result = basket->payoff(basketPath);
+    ASSERT_EQ(result,0);
+
+    pnl_mat_free(&basketPath);
+    delete basket;
 }
 
 TEST(BasketOption, BasketOption1Pos){
@@ -69,6 +84,9 @@ TEST(BasketOption, BasketOption1Pos){
     BasketOption *basket  = new BasketOption(3, 1000, 40, 100);
     double result = basket->payoff(basketPath);
     ASSERT_TRUE(result >= 3.79563912499998 - 0.0001 && result <= 3.79563912499998 + 0.0001);
+
+    pnl_mat_free(&basketPath);
+    delete basket;
 }
 
 TEST(BasketOption, BasketOption1Nul){
@@ -77,6 +95,9 @@ TEST(BasketOption, BasketOption1Nul){
     BasketOption *basket  = new BasketOption(3, 1000, 40, 110);
     double result = basket->payoff(basketPath);
     ASSERT_EQ(result,0);
+
+    pnl_mat_free(&basketPath);
+    delete basket;
 }
 
 TEST(BasketOption, BasketOption2Pos){
@@ -85,6 +106,9 @@ TEST(BasketOption, BasketOption2Pos){
     BasketOption *basket  = new BasketOption(1, 365, 40, 100);
     double result = basket->payoff(basketPath);
     ASSERT_TRUE(result >= 35.6169229500001 - 0.0001 && result <= 35.6169229500001 + 0.0001);
+
+    pnl_mat_free(&basketPath);
+    delete basket;
 }
 
 TEST(BasketOption, BasketOption2Nul){
@@ -93,6 +117,9 @@ TEST(BasketOption, BasketOption2Nul){
     BasketOption *basket  = new BasketOption(1, 365, 40, 140);
     double result = basket->payoff(basketPath);
     ASSERT_EQ(result,0);
+
+    pnl_mat_free(&basketPath);
+    delete basket;
 }
 
 TEST(AsianOption, AsianOptionPos){
@@ -101,6 +128,9 @@ TEST(AsianOption, AsianOptionPos){
     AsianOption *asian  = new AsianOption(1.5, 450, 2, 90);
     double result = asian->payoff(asianPath);
     ASSERT_TRUE(result >= 2.1552890886918 - 0.0001 && result <= 2.1552890886918 + 0.0001);
+
+    pnl_mat_free(&asianPath);
+    delete asian;
 }
 
 TEST(AsianOption, AsianOptionNul){
@@ -109,6 +139,9 @@ TEST(AsianOption, AsianOptionNul){
     AsianOption *asian  = new AsianOption(1.5, 450, 2, 95);
     double result = asian->payoff(asianPath);
     ASSERT_EQ(result,0);
+
+    pnl_mat_free(&asianPath);
+    delete asian;
 }
 
 TEST(PerformanceOption, PerformanceOptionPos){
@@ -117,6 +150,9 @@ TEST(PerformanceOption, PerformanceOptionPos){
     PerformanceOption *perf  = new PerformanceOption(2, 96, 5);
     double result = perf->payoff(perfPath);
     ASSERT_TRUE(result >= 1.88337442199339 - 0.0001 && result <= 1.88337442199339 + 0.0001);
+
+    pnl_mat_free(&perfPath);
+    delete perf;
 }
 
 
