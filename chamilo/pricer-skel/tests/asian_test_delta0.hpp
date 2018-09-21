@@ -36,7 +36,7 @@ TEST(MonteCarlo, AsianDelta0){
     BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot);
     Option *aOption = new AsianOption(T, timestep, size, strike);
     PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
-    
+
     pnl_rng_init(rng, PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
     MonteCarlo *mCarlo = new MonteCarlo(bsmodel, aOption, rng, fdStep, n_samples);
@@ -44,7 +44,7 @@ TEST(MonteCarlo, AsianDelta0){
     PnlMat *past = pnl_mat_create_from_scalar(1, 2, 100);
     PnlVect *delta = pnl_vect_create(2);
     PnlVect *conf_delta = pnl_vect_create(2);
-    
+
 
     mCarlo->delta(past, 0, delta, conf_delta);
 

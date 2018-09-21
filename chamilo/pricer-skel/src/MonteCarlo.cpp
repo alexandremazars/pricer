@@ -82,7 +82,7 @@ void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *co
             mod_->shiftAsset(increment_path, path, d, fdStep_, t, timestep);
             mod_->shiftAsset(decrement_path, path, d, -fdStep_, t, timestep);
             payoff_increment = opt_->payoff(increment_path);
-            payoff_decrement = opt_->payoff(decrement_path); 
+            payoff_decrement = opt_->payoff(decrement_path);
             sum += payoff_increment - payoff_decrement;
             sum2 += pow(payoff_increment - payoff_decrement, 2);
         }

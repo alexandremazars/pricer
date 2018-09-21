@@ -55,15 +55,12 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *r
         for (int i = 1; i < nbTimeSteps+1; ++i) {
             pnl_mat_get_row(row_Gauss, suite_Gauss, i);
             produitScalaire = pnl_vect_scalar_prod(row_Gauss, row_Chol);
-            prix = prix_Prec * exp((r_-(pow(sigma,2))/2)*delta_t + produitScalaire * sigma * sqrt(delta_t));
+            prix = prix_Prec * exp((r_-(pow(sigma,2))/2) * delta_t + produitScalaire * sigma * sqrt(delta_t));
             pnl_mat_set(path, i, d, prix);
             prix_Prec = prix;
         }
     }
 
-    // Free
-    //pnl_mat_print(path);
-    //printf("\n" );
     pnl_vect_free(&row_Chol);
     pnl_vect_free(&row_Gauss);
     pnl_mat_free(&suite_Gauss);
@@ -109,14 +106,7 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
     PnlVect *row_Gauss = pnl_vect_create(size_);
     double produitScalaire;
 
-    PnlVect *price_i = pnl_vect_create(size_);
-
-    //mettre dans path les valeurs de past
-    for (int j = 0; j < nbSteps - a; ++j) {
-        pnl_mat_get_row(price_i, past, j);
-        pnl_mat_set_row(path, price_i, j);
-    }
-
+    pnl_mat_set_subblock(path, past, 0, 0);
 
     //Simuler les valeurs suivantes
     for (int d = 0; d < size_ ; ++d) {
@@ -137,7 +127,6 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
     }
 
     // Free
-    pnl_vect_free(&price_i);
     pnl_vect_free(&row_Chol);
     pnl_mat_free(&mat_Chol);
     pnl_vect_free(&row_Gauss);
