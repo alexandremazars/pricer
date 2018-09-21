@@ -36,7 +36,7 @@ TEST(MonteCarlo, Basket2Delta0){
     BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot);
     Option *bOption = new BasketOption(T, timestep, size, strike);
     PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
-    //
+    
     pnl_rng_init(rng, PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
     MonteCarlo *mCarlo = new MonteCarlo(bsmodel, bOption, rng, fdStep, n_samples);
@@ -46,19 +46,12 @@ TEST(MonteCarlo, Basket2Delta0){
     pnl_mat_set(past, 0, 1, 100.0);
     PnlVect *delta = pnl_vect_create(2);
     PnlVect *conf_delta = pnl_vect_create(2);
-    printf("delta:");
-    pnl_vect_print(delta);
-    printf("conf_delta:\n")   ; 
-    pnl_vect_print(conf_delta);
-    printf("past:") ;
-    pnl_mat_print(past);
-
-    //void delta(const PnlMat *past, double t, PnlVect *delta, const PnlVect *conf_delta);
+    
 
     mCarlo->delta(past, 0, delta, conf_delta);
-    ASSERT_LE(0.281640 - 0.001058, GET(conf_delta, 0)) << "Error, delta of first option not in confidence interval, too low";
+    ASSERT_LE(0.281640 - 0.001058, GET(delta, 0)) << "Error, delta of first option not in confidence interval, too low";
     ASSERT_GE(GET(conf_delta, 0), 0.281640 + 0.001058) << "Error, delta of first option not in confidence interval, too high";
-    ASSERT_LE(0.281951 - 0.001060, GET(conf_delta, 1)) << "Error, delta of second option not in confidence interval, too low";
+    ASSERT_LE(0.281951 - 0.001060, GET(delta, 1)) << "Error, delta of second option not in confidence interval, too low";
     ASSERT_GE(GET(conf_delta, 1), 0.281951 + 0.001060) << "Error, delta of second option not in confidence interval, too high";
 
     pnl_mat_free(&past);

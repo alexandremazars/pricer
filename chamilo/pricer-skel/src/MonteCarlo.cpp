@@ -49,28 +49,32 @@ void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic){
     ic = 1.96 * sqrt(estimateur_carre/nbSamples_);
 }
 
-void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, const PnlVect *conf_delta){
+void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *conf_delta){
 
-    delta = pnl_vect_create(mod_->size_);
-
-    int timestep = (opt_->nbTimeSteps_+1)/opt_->T_;
-    int sum = 0;
-    double prix;
+    double sum;
+    double sum2;
+    double timestep = opt_->T_/(opt_->nbTimeSteps_+1);
     double ic;
-    price(past, t, prix, ic);
-    double coefficient = exp(-mod_->r_ * (opt_->T_ - t))/(2 * nbSamples_ * fdStep_ * prix);
+    double coefficient;
+    double prix;
 
     PnlMat *path = pnl_mat_create(opt_->nbTimeSteps_ + 1, mod_->size_);
     PnlMat *increment_path = pnl_mat_create(opt_->nbTimeSteps_ + 1, mod_->size_);
     PnlMat *decrement_path = pnl_mat_create(opt_->nbTimeSteps_ + 1, mod_->size_);
 
     for (int d = 0; d < mod_->size_; d++) {
-      for (size_t i = 0; i < nbSamples_; i++) {
-        mod_->asset(path, t, opt_->T_, opt_->nbTimeSteps_, rng_, past);
-        mod_->shiftAsset(increment_path, path, d, fdStep_, t, timestep);
-        mod_->shiftAsset(decrement_path, path, d, -fdStep_, t, timestep);
-        sum += opt_->payoff(increment_path) - opt_->payoff(decrement_path);
-      }
-      pnl_vect_set(delta, d, coefficient * sum);
+        sum = 0;
+        sum2 = 0;
+        prix = pnl_mat_get(past, past->m - 1, d);
+        coefficient = exp(-mod_->r_ * (opt_->T_ - t))/(2 * fdStep_ * prix);
+        for (size_t i = 0; i < nbSamples_; i++) {
+            mod_->asset(path, opt_->T_, opt_->nbTimeSteps_, rng_);
+            mod_->shiftAsset(increment_path, path, d, fdStep_, t, timestep);
+            mod_->shiftAsset(decrement_path, path, d, -fdStep_, t, timestep);
+            sum += opt_->payoff(increment_path) - opt_->payoff(decrement_path);
+            sum2 += pow(opt_->payoff(increment_path) - opt_->payoff(decrement_path), 2);
+        }
+        pnl_vect_set(delta, d, coefficient * sum / nbSamples_);
+        pnl_vect_set(conf_delta, d, sqrt((sum2/nbSamples_ - pow(sum/nbSamples_,2)) * coefficient/nbSamples_));
     }
 }

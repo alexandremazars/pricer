@@ -47,5 +47,5 @@ public:
      * @param[in] delta contient le vecteur de delta
      * de confiance sur le calcul du delta
      */
-    void delta(const PnlMat *past, double t, PnlVect *delta, const PnlVect *conf_delta);
+    void delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *conf_delta);
 };
