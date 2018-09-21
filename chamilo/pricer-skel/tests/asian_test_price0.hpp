@@ -2,8 +2,6 @@
 #define CHAMILO_TEST_ASIAN_PRICE0
 #include <gtest/gtest.h>
 #include "jlparser/parser.hpp"
-#include "../src/BlackScholesModel.cpp"
-#include "../src/MonteCarlo.cpp"
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 

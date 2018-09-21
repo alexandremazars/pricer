@@ -8,10 +8,6 @@
 #define CHAMILO_TEST_ASSET_H
 #include <gtest/gtest.h>
 #include "pnl/pnl_matrix.h"
-#include "../src/CallOption.cpp"
-#include "../src/BasketOption.cpp"
-#include "../src/AsianOption.cpp"
-#include "../src/PerformanceOption.cpp"
 #include <fstream>
 #include <iostream>
 
