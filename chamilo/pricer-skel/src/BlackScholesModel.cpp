@@ -88,14 +88,24 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
     pnl_mat_chol(mat_Chol);
 
     //nbSteps correspondant
-    double nbSteps = floor(t * nbTimeSteps / T) + 1;
+    int a = 0;
+    double step_1 = t * nbTimeSteps / T ;
+    double nbSteps = floor(t * nbTimeSteps / T);
+    if (nbSteps == step_1) {
+      nbSteps += 1 ;
+    }
+    else{
+      nbSteps += 2 ;
+      a = 1;
+    }
+    //double nbSteps = floor(t * nbTimeSteps / T) + 1;
 
     //simuler les vecteurs gaussien
-    PnlMat *suite_Gauss = pnl_mat_create(nbTimeSteps - nbSteps + 1, size_);
+    PnlMat *suite_Gauss = pnl_mat_create(nbTimeSteps - nbSteps + 1 , size_);
     PnlVect *G = pnl_vect_new();
     for (int d = 0; d < size_; ++d) {
         G = pnl_vect_new();
-        pnl_vect_rng_normal(G, nbTimeSteps - nbSteps + 1, rng);
+        pnl_vect_rng_normal(G, nbTimeSteps - nbSteps + 1 , rng);
         pnl_mat_set_col(suite_Gauss, G, d);
     }
     //Calcul des prix
@@ -103,7 +113,7 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
     PnlVect *row_Gauss = pnl_vect_create(size_);
     double produitScalaire;
     //mettre dans path les valeurs de past
-    for (int j = 0; j < nbSteps; ++j) {
+    for (int j = 0; j < nbSteps - a; ++j) {
         PnlVect *price_i = pnl_vect_create(size_);
         pnl_mat_get_row(price_i, past, j);
         pnl_mat_set_row(path, price_i, j);
@@ -117,14 +127,14 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
         double cours = 0;
         double sigma = pnl_vect_get(sigma_, d);
         pnl_mat_get_row(row_Chol, mat_Chol,d);
-        for (int i = 0; i < nbTimeSteps - nbSteps; ++i) {
+        for (int i = 0; i < nbTimeSteps - nbSteps ; ++i) {
             pnl_mat_get_row(row_Gauss, suite_Gauss, i + 1);
             produitScalaire = pnl_vect_scalar_prod(row_Gauss, row_Chol);
             //double brownien = pnl_mat_get(suite_Gauss, i, d);
             cours = cours_prec * exp((r_-(pow(sigma,2))/2)* delta_t   +  produitScalaire * sigma * sqrt(delta_t));
             prix = prix_Prec * cours;
             cours_prec = cours;
-            pnl_mat_set(path, ( i + nbSteps), d, prix);
+            pnl_mat_set(path, ( i + (nbSteps - a)), d, prix);
         }
         //printf("prix %f\n",prix );
     }

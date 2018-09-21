@@ -43,7 +43,14 @@ MonteCarlo *mCarlo = new MonteCarlo(bsmodel, call, rng, fdStep, n_samples);
 double prix = 0.0;
 double ic = 0.0;
 double t = 0.1;
-double step = floor(t * nbTimeSteps / T) + 1;
+double step_1 = t * nbTimeSteps / T ;
+double step = floor(t * nbTimeSteps / T);
+if (step == step_1) {
+  step += 1 ;
+}
+else{
+  step += 2 ;
+}
 PnlMat *past = pnl_mat_create(step, size);
 pnl_mat_extract_subblock(past, callPath, 0, step,  0, size);
 //pnl_mat_print(past);
@@ -103,7 +110,14 @@ MonteCarlo *mCarlo = new MonteCarlo(bsmodel, asian, rng, fdStep, n_samples);
 double prix = 0.0;
 double ic = 0.0;
 double t = 0.1;
-double step = floor(t * nbTimeSteps / T) + 1;
+double step_1 = t * nbTimeSteps / T ;
+double step = floor(t * nbTimeSteps / T);
+if (step == step_1) {
+  step += 1 ;
+}
+else{
+  step += 2 ;
+}
 PnlMat *past = pnl_mat_create(step, size);
 pnl_mat_extract_subblock(past, asianPath, 0, step,  0, size);
 //pnl_mat_print(past);
@@ -160,8 +174,15 @@ MonteCarlo *mCarlo = new MonteCarlo(bsmodel, basket, rng, fdStep, n_samples);
 
 double prix = 0.0;
 double ic = 0.0;
-double t = 0.1;
-double step = floor(t * nbTimeSteps / T) + 1;
+double t = 10.0/365.0;
+double step_1 = t * nbTimeSteps / T ;
+double step = floor(t * nbTimeSteps / T);
+if (step == step_1) {
+  step += 1 ;
+}
+else{
+  step += 2 ;
+}
 PnlMat *past = pnl_mat_create(step, size);
 pnl_mat_extract_subblock(past, basketPath, 0, step,  0, size);
 //pnl_mat_print(past);
@@ -217,7 +238,14 @@ MonteCarlo *mCarlo = new MonteCarlo(bsmodel, basket1, rng, fdStep, n_samples);
 double prix = 0.0;
 double ic = 0.0;
 double t = 0.1;
-double step = floor(t * nbTimeSteps / T) + 1;
+double step_1 = t * nbTimeSteps / T ;
+double step = floor(t * nbTimeSteps / T);
+if (step == step_1) {
+  step += 1 ;
+}
+else{
+  step += 2 ;
+}
 PnlMat *past = pnl_mat_create(step, size);
 pnl_mat_extract_subblock(past, basket1Path, 0, step,  0, size);
 //pnl_mat_print(past);
@@ -273,7 +301,14 @@ MonteCarlo *mCarlo = new MonteCarlo(bsmodel, basket2, rng, fdStep, n_samples);
 double prix = 0.0;
 double ic = 0.0;
 double t = 0.1;
-double step = floor(t * nbTimeSteps / T) + 1;
+double step_1 = t * nbTimeSteps / T ;
+double step = floor(t * nbTimeSteps / T);
+if (step == step_1) {
+  step += 1 ;
+}
+else{
+  step += 2 ;
+}
 PnlMat *past = pnl_mat_create(step, size);
 pnl_mat_extract_subblock(past, basket2Path, 0, step,  0, size);
 //pnl_mat_print(past);
@@ -329,7 +364,14 @@ MonteCarlo *mCarlo = new MonteCarlo(bsmodel, basket2d, rng, fdStep, n_samples);
 double prix = 0.0;
 double ic = 0.0;
 double t = 0.1;
-double step = floor(t * nbTimeSteps / T) + 1;
+double step_1 = t * nbTimeSteps / T ;
+double step = floor(t * nbTimeSteps / T);
+if (step == step_1) {
+  step += 1 ;
+}
+else{
+  step += 2 ;
+}
 PnlMat *past = pnl_mat_create(step, size);
 pnl_mat_extract_subblock(past, basket2dPath, 0, step,  0, size);
 //pnl_mat_print(past);
