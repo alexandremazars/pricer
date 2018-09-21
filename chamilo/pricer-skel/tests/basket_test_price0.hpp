@@ -41,11 +41,9 @@ TEST(MonteCarlo, Basket0){
     double prix = 0.0;
     double ic = 0.0;
     mCarlo->price(prix , ic);
-    printf("%f\n", prix);
-    printf("%f\n", ic);
     ASSERT_LE(prix - ic, 13.627) << "Error, price at t=0 not in confidence interval, too low";
     ASSERT_GE(prix + ic, 13.627) << "Error, price at t=0 not in confidence interval, too high";
-
+    ASSERT_TRUE(abs((ic / 1.96) - 0.025)/0.025 <= 0.05); // erreur relative inf a 5%
 }
 
 

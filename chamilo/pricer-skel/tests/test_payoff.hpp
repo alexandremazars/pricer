@@ -51,6 +51,22 @@ TEST(BasketOption, BasketOption2dNul){
     ASSERT_EQ(result,0);
 }
 
+TEST(BasketOption, BasketOptionPos){
+const char *file = "../../market-data/simul_basket.dat";
+PnlMat *basketPath = pnl_mat_create_from_file(file);
+BasketOption *basket  = new BasketOption(1, 365, 5, 100);
+double result = basket->payoff(basketPath);
+ASSERT_TRUE(result >= 3.4349628 - 0.0001 && result <= 3.4349628 + 0.0001);
+}
+
+TEST(BasketOption, BasketOptionNul){
+const char *file = "../../market-data/simul_basket.dat";
+PnlMat *basketPath = pnl_mat_create_from_file(file);
+BasketOption *basket  = new BasketOption(1, 365, 5, 110);
+double result = basket->payoff(basketPath);
+ASSERT_EQ(result,0);
+}
+
 TEST(BasketOption, BasketOption1Pos){
     const char *file = "../../market-data/simul_basket_1.dat";
     PnlMat *basketPath = pnl_mat_create_from_file(file);

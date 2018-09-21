@@ -11,6 +11,12 @@
 #include "perf_test_price0.hpp"
 #include "call_test_price_t.hpp"
 #include "asian_test_delta0.hpp"
+#include "../src/BlackScholesModel.cpp"
+#include "../src/MonteCarlo.cpp"
+#include "../src/AsianOption.cpp"
+#include "../src/BasketOption.cpp"
+#include "../src/CallOption.cpp"
+#include "../src/PerformanceOption.cpp"
 #include "test_price_t.hpp"
 
 int main(int argc,char *argv[]) {
