@@ -5,7 +5,7 @@
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 
-TEST(MonteCarlo, Basket2){
+TEST(MonteCarlo, Basket2_price_0){
     double fdStep = 1;
     double T, r, strike, correlation;
     PnlVect *spot, *sigma, *divid;
@@ -42,8 +42,8 @@ TEST(MonteCarlo, Basket2){
     double ic = 0.0;
     mCarlo->price(prix , ic);
 
-    ASSERT_LE(prix - ic, 9.238710) << "Error, price at t=0 not in confidence interval, too low";
-    ASSERT_GE(prix + ic, 9.238710) << "Error, price at t=0 not in confidence interval, too high";
+    ASSERT_LE(9.238710 - ic, prix) << "Error, price at t=0 not in confidence interval, too low";
+    ASSERT_GE(9.238710 + ic, prix) << "Error, price at t=0 not in confidence interval, too high";
     //printf("ic carr %f \n", (pow(ic,2) * n_samples) / pow(1.96,2));
     //printf("ecar rel %f \n", (((pow(ic,2) * n_samples) / pow(1.96,2))-152.094852)/152.094852);
     ASSERT_TRUE(abs((((pow(ic,2) * n_samples) / pow(1.96,2))-152.094852)/152.094852)<=0.05); // ecart relatif inf a 5%

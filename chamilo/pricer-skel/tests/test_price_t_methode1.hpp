@@ -1,0 +1,436 @@
+//
+// Created by lecalvmy on 9/20/18.
+//
+
+#ifndef MC_PRICER_TEST_PRICE_T_H
+#define MC_PRICER_TEST_PRICE_T_H
+
+#include <gtest/gtest.h>
+#include "jlparser/parser.hpp"
+#include "pnl/pnl_random.h"
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_matrix.h"
+
+TEST(MonteCarlo, Call_price_t){
+
+const char *infile = "../../market-data/simul_call.dat";
+const PnlMat *callPath = pnl_mat_create_from_file(infile);
+
+double fdStep = 1; // valeur quelconque car non utilisee pour ce test
+
+int size = 1;
+double r = 0.02;
+double rho = 0;
+PnlVect *sigma = pnl_vect_create_from_scalar(size,0.200000);
+PnlVect *spot = pnl_vect_create_from_scalar(size,100.000000);
+
+double T = 2.000000;
+int nbTimeSteps = 365;
+double strike = 100;
+
+PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
+
+size_t n_samples = 50000;
+
+BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot);
+Option *call = new CallOption(T, nbTimeSteps, size, strike);
+
+pnl_rng_init(rng, PNL_RNG_MERSENNE);
+pnl_rng_sseed(rng, time(NULL));
+
+MonteCarlo *mCarlo = new MonteCarlo(bsmodel, call, rng, fdStep, n_samples);
+
+double prix = 0.0;
+double ic = 0.0;
+double t = 0.1;
+double step_1 = t * nbTimeSteps / T ;
+double step = floor(t * nbTimeSteps / T);
+if (step == step_1) {
+  step += 1 ;
+}
+else{
+  step += 2 ;
+}
+PnlMat *past = pnl_mat_create(step, size);
+pnl_mat_extract_subblock(past, callPath, 0, step,  0, size);
+
+mCarlo->price(past, t, prix, ic);
+
+PnlVect *spot2 = pnl_vect_create(size);
+pnl_mat_get_row(spot2, past, (int) (past->m - 1));
+
+double prix2 = 0;
+double ic2 = 0;
+
+BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
+Option *call2  = new CallOption(T - t, nbTimeSteps - step, size, strike);
+MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, call2, rng, fdStep, n_samples);
+
+mCarlo2->price(prix2, ic2);
+
+ASSERT_TRUE(abs(prix-prix2)/prix2 <= 0.05); // ecart relatif inf a 5%
+
+}
+
+TEST(MonteCarlo, Asian_price_t){
+
+const char *infile = "../../market-data/simul_asian.dat";
+const PnlMat *asianPath = pnl_mat_create_from_file(infile);
+
+double fdStep = 1; // valeur quelconque car non utilisee pour ce test
+
+int size = 2;
+double r = 0.02;
+double rho = 0;
+PnlVect *sigma = pnl_vect_create_from_scalar(size,0.200000);
+PnlVect *spot = pnl_vect_create_from_scalar(size,100.000000);
+
+double T = 1.500000;
+int nbTimeSteps = 450;
+double strike = 90;
+
+PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
+
+size_t n_samples = 50000;
+
+BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot);
+Option *asian = new AsianOption(T, nbTimeSteps, size, strike);
+
+pnl_rng_init(rng, PNL_RNG_MERSENNE);
+pnl_rng_sseed(rng, time(NULL));
+
+MonteCarlo *mCarlo = new MonteCarlo(bsmodel, asian, rng, fdStep, n_samples);
+
+double prix = 0.0;
+double ic = 0.0;
+double t = 0.1;
+double step_1 = t * nbTimeSteps / T ;
+double step = floor(t * nbTimeSteps / T);
+if (step == step_1) {
+  step += 1 ;
+}
+else{
+  step += 2 ;
+}
+PnlMat *past = pnl_mat_create(step, size);
+pnl_mat_extract_subblock(past, asianPath, 0, step,  0, size);
+//pnl_mat_print(past);
+mCarlo->price(past, t, prix, ic);
+
+PnlVect *spot2 = pnl_vect_create(size);
+pnl_mat_get_row(spot2, past, (int) (past->m - 1));
+
+double prix2 = 0;
+double ic2 = 0;
+
+BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
+Option *asian2  = new AsianOption(T - t, nbTimeSteps - step, size, strike);
+MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, asian2, rng, fdStep, n_samples);
+mCarlo2->price(prix2, ic2);
+
+ASSERT_TRUE(abs(prix-prix2)/prix2 <= 0.05); // ecart relatif inf a 5%
+
+}
+
+
+
+TEST(MonteCarlo, Basket_price_t){
+
+const char *infile = "../../market-data/simul_basket.dat";
+const PnlMat *basketPath = pnl_mat_create_from_file(infile);
+
+double fdStep = 1; // valeur quelconque car non utilisee pour ce test
+
+int size = 5;
+double r = 0.04879;
+double rho = 0;
+PnlVect *sigma = pnl_vect_create_from_scalar(size,0.200000);
+PnlVect *spot = pnl_vect_create_from_scalar(size,100.000000);
+
+double T = 1.000000;
+int nbTimeSteps = 365;
+double strike = 100;
+
+PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
+
+size_t n_samples = 50000;
+
+BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot);
+Option *basket = new BasketOption(T, nbTimeSteps, size, strike);
+
+pnl_rng_init(rng, PNL_RNG_MERSENNE);
+pnl_rng_sseed(rng, time(NULL));
+
+MonteCarlo *mCarlo = new MonteCarlo(bsmodel, basket, rng, fdStep, n_samples);
+
+double prix = 0.0;
+double ic = 0.0;
+double t = 0.1;
+double step_1 = t * nbTimeSteps / T ;
+double step = floor(t * nbTimeSteps / T);
+if (step == step_1) {
+  step += 1 ;
+}
+else{
+  step += 2 ;
+}
+PnlMat *past = pnl_mat_create(step, size);
+pnl_mat_extract_subblock(past, basketPath, 0, step,  0, size);
+//pnl_mat_print(past);
+mCarlo->price(past, t, prix, ic);
+
+PnlVect *spot2 = pnl_vect_create(size);
+pnl_mat_get_row(spot2, past, (int) (past->m - 1));
+
+double prix2 = 0;
+double ic2 = 0;
+
+BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
+Option *basket_2  = new BasketOption(T - t, nbTimeSteps - step, size, strike);
+MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, basket_2, rng, fdStep, n_samples);
+mCarlo2->price(prix2, ic2);
+
+ASSERT_TRUE(abs(prix-prix2)/prix2 <= 0.05); // ecart relatif inf a 5%
+
+}
+
+TEST(MonteCarlo, Basket_1_price_t){
+
+const char *infile = "../../market-data/simul_basket_1.dat";
+const PnlMat *basket1Path = pnl_mat_create_from_file(infile);
+
+double fdStep = 1; // valeur quelconque car non utilisee pour ce test
+
+int size = 40;
+double r = 0.04879;
+double rho = 0;
+PnlVect *sigma = pnl_vect_create_from_scalar(size,0.200000);
+PnlVect *spot = pnl_vect_create_from_scalar(size,100.000000);
+
+double T = 3.000000;
+int nbTimeSteps = 1000;
+double strike = 100;
+
+PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
+
+size_t n_samples = 5000;
+
+BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot);
+Option *basket1 = new BasketOption(T, nbTimeSteps, size, strike);
+
+pnl_rng_init(rng, PNL_RNG_MERSENNE);
+pnl_rng_sseed(rng, time(NULL));
+
+MonteCarlo *mCarlo = new MonteCarlo(bsmodel, basket1, rng, fdStep, n_samples);
+
+double prix = 0.0;
+double ic = 0.0;
+double t = 0.1;
+double step_1 = t * nbTimeSteps / T ;
+double step = floor(t * nbTimeSteps / T);
+if (step == step_1) {
+  step += 1 ;
+}
+else{
+  step += 2 ;
+}
+PnlMat *past = pnl_mat_create(step, size);
+pnl_mat_extract_subblock(past, basket1Path, 0, step,  0, size);
+//pnl_mat_print(past);
+mCarlo->price(past, t, prix, ic);
+
+PnlVect *spot2 = pnl_vect_create(size);
+pnl_mat_get_row(spot2, past, (int) (past->m - 1));
+
+double prix2 = 0;
+double ic2 = 0;
+
+BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
+Option *basket1_2  = new BasketOption(T - t, nbTimeSteps - step, size, strike);
+MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, basket1_2, rng, fdStep, n_samples);
+mCarlo2->price(prix2, ic2);
+
+ASSERT_TRUE(abs(prix-prix2)/prix2 <= 0.05); // ecart relatif inf a 5%
+
+}
+
+TEST(MonteCarlo, Basket_2_price_t){
+
+const char *infile = "../../market-data/simul_basket_2.dat";
+const PnlMat *basket2Path = pnl_mat_create_from_file(infile);
+
+double fdStep = 1; // valeur quelconque car non utilisee pour ce test
+
+int size = 40;
+double r = 0.04879;
+double rho = 0.7;
+PnlVect *sigma = pnl_vect_create_from_scalar(size,0.200000);
+PnlVect *spot = pnl_vect_create_from_scalar(size,100.000000);
+
+double T = 1.000000;
+int nbTimeSteps = 365;
+double strike = 100;
+
+PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
+
+size_t n_samples = 5000;
+
+BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot);
+Option *basket2 = new BasketOption(T, nbTimeSteps, size, strike);
+
+pnl_rng_init(rng, PNL_RNG_MERSENNE);
+pnl_rng_sseed(rng, time(NULL));
+
+MonteCarlo *mCarlo = new MonteCarlo(bsmodel, basket2, rng, fdStep, n_samples);
+
+double prix = 0.0;
+double ic = 0.0;
+double t = 0.1;
+double step_1 = t * nbTimeSteps / T ;
+double step = floor(t * nbTimeSteps / T);
+if (step == step_1) {
+  step += 1 ;
+}
+else{
+  step += 2 ;
+}
+PnlMat *past = pnl_mat_create(step, size);
+pnl_mat_extract_subblock(past, basket2Path, 0, step,  0, size);
+//pnl_mat_print(past);
+mCarlo->price(past, t, prix, ic);
+
+PnlVect *spot2 = pnl_vect_create(size);
+pnl_mat_get_row(spot2, past, (int) (past->m - 1));
+
+double prix2 = 0;
+double ic2 = 0;
+
+BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
+Option *basket2_2  = new BasketOption(T - t, nbTimeSteps - step, size, strike);
+MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, basket2_2, rng, fdStep, n_samples);
+mCarlo2->price(prix2, ic2);
+
+ASSERT_TRUE(abs(prix-prix2)/prix2 <= 0.05); // ecart relatif inf a 5%
+
+}
+
+TEST(MonteCarlo, Basket_2d_price_t){
+
+const char *infile = "../../market-data/simul_basket_2d.dat";
+const PnlMat *basket2dPath = pnl_mat_create_from_file(infile);
+
+double fdStep = 1; // valeur quelconque car non utilisee pour ce test
+
+int size = 2;
+double r = 0.04879;
+double rho = 0;
+PnlVect *sigma = pnl_vect_create_from_scalar(size,0.200000);
+PnlVect *spot = pnl_vect_create_from_scalar(size,100.000000);
+
+double T = 1.000000;
+int nbTimeSteps = 365;
+double strike = 100;
+
+PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
+
+size_t n_samples = 50000;
+
+BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot);
+Option *basket2d = new BasketOption(T, nbTimeSteps, size, strike);
+
+pnl_rng_init(rng, PNL_RNG_MERSENNE);
+pnl_rng_sseed(rng, time(NULL));
+
+MonteCarlo *mCarlo = new MonteCarlo(bsmodel, basket2d, rng, fdStep, n_samples);
+
+double prix = 0.0;
+double ic = 0.0;
+double t = 0.1;
+double step_1 = t * nbTimeSteps / T ;
+double step = floor(t * nbTimeSteps / T);
+if (step == step_1) {
+  step += 1 ;
+}
+else{
+  step += 2 ;
+}
+PnlMat *past = pnl_mat_create(step, size);
+pnl_mat_extract_subblock(past, basket2dPath, 0, step,  0, size);
+//pnl_mat_print(past);
+mCarlo->price(past, t, prix, ic);
+
+PnlVect *spot2 = pnl_vect_create(size);
+pnl_mat_get_row(spot2, past, (int) (past->m - 1));
+
+double prix2 = 0;
+double ic2 = 0;
+
+BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
+Option *basket2d_2  = new BasketOption(T - t, nbTimeSteps - step, size, strike);
+MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, basket2d_2, rng, fdStep, n_samples);
+mCarlo2->price(prix2, ic2);
+
+ASSERT_TRUE(abs(prix-prix2)/prix2 <= 0.05); // ecart relatif inf a 5%
+
+}
+
+TEST(MonteCarlo, Perf_price_t){
+
+const char *infile = "../../market-data/simul_perf.dat";
+const PnlMat *perfPath = pnl_mat_create_from_file(infile);
+
+double fdStep = 1; // valeur quelconque car non utilisee pour ce test
+
+int size = 5;
+double r = 0.03;
+double rho = 0.5;
+PnlVect *sigma = pnl_vect_create_from_scalar(size,0.200000);
+PnlVect *spot = pnl_vect_create_from_scalar(size,100.000000);
+
+double T = 2.000000;
+int nbTimeSteps = 96;
+
+PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
+
+size_t n_samples = 50000;
+
+BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot);
+Option *perf = new PerformanceOption(T, nbTimeSteps, size);
+
+pnl_rng_init(rng, PNL_RNG_MERSENNE);
+pnl_rng_sseed(rng, time(NULL));
+
+MonteCarlo *mCarlo = new MonteCarlo(bsmodel, perf, rng, fdStep, n_samples);
+
+double prix = 0.0;
+double ic = 0.0;
+double t = 0.1;
+double step_1 = t * nbTimeSteps / T ;
+double step = floor(t * nbTimeSteps / T);
+if (step == step_1) {
+step += 1 ;
+}
+else{
+step += 2 ;
+}
+PnlMat *past = pnl_mat_create(step, size);
+pnl_mat_extract_subblock(past, perfPath, 0, step,  0, size);
+//pnl_mat_print(past);
+mCarlo->price(past, t, prix, ic);
+
+PnlVect *spot2 = pnl_vect_create(size);
+pnl_mat_get_row(spot2, past, (int) (past->m - 1));
+
+double prix2 = 0;
+double ic2 = 0;
+
+BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
+Option *perf2  = new PerformanceOption(T - t, nbTimeSteps - step, size);
+MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, perf2, rng, fdStep, n_samples);
+mCarlo2->price(prix2, ic2);
+
+ASSERT_TRUE(abs(prix-prix2)/prix2 <= 0.05); // ecart relatif inf a 5%
+
+}
+
+#endif //MC_PRICER_TEST_PRICE_T_H
