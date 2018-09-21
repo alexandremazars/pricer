@@ -10,9 +10,9 @@
 #include "../src/CallOption.cpp"
 #include "../src/PerformanceOption.cpp"
 
-//#include "asian_test_delta0.hpp"
-//#include "basket_test_delta0.hpp"
-//#include "basket1_test_delta0.hpp"
+#include "asian_test_delta0.hpp"
+#include "basket_test_delta0.hpp"
+#include "basket1_test_delta0.hpp"
 #include "basket2_test_delta0.hpp"
 
 int main(int argc,char *argv[]) {
