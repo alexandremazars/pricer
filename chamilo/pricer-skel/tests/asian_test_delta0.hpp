@@ -57,10 +57,18 @@ TEST(MonteCarlo, AsianDelta0){
     //ASSERT_LE(0.281951 - ic, GET(delta, 1)) << "Error, delta of second option not in confidence interval, too low";
     //ASSERT_GE(0.281951 + ic, GET(delta, 1)) << "Error, delta of second option not in confidence interval, too high";
 
+    pnl_vect_free(&spot);
+    pnl_vect_free(&sigma);
+    pnl_vect_free(&divid);
+    pnl_rng_free(&rng);
     pnl_mat_free(&past);
     pnl_vect_free(&delta);
     pnl_vect_free(&conf_delta);
+
     delete P;
+    delete bsmodel;
+    delete aOption;
+    delete mCarlo;
 }
 
 

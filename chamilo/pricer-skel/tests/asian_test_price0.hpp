@@ -45,7 +45,14 @@ TEST(MonteCarlo, Asian_price_0){
     ASSERT_GE(4.67 + ic, prix) << "Error, price at t=0 not in confidence interval, too high";
     ASSERT_TRUE(abs((ic / 1.96)-0.029)/0.029 <= 0.05); // ecart relatif inf a 5%
 
+    pnl_vect_free(&spot);
+    pnl_vect_free(&sigma);
+    pnl_vect_free(&divid);
+    pnl_rng_free(&rng);
     delete P;
+    delete bsmodel;
+    delete aOption;
+    delete mCarlo;
 }
 
 

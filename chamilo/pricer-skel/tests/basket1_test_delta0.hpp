@@ -62,10 +62,19 @@ TEST(MonteCarlo, Basket1Delta0){
             good_sum +=1;
         }*/
     }
-    //pnl_mat_free(&past);
+
+    pnl_vect_free(&spot);
+    pnl_vect_free(&sigma);
+    pnl_vect_free(&divid);
+    pnl_rng_free(&rng);
+    pnl_mat_free(&past);
     pnl_vect_free(&delta);
     pnl_vect_free(&conf_delta);
+
     delete P;
+    delete bsmodel;
+    delete bOption;
+    delete mCarlo;
 }
 
 

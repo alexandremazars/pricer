@@ -44,7 +44,15 @@ TEST(MonteCarlo, Basket0_price_0){
     ASSERT_LE(13.627 - ic, prix) << "Error, price at t=0 not in confidence interval, too low";
     ASSERT_GE(13.627 + ic, prix) << "Error, price at t=0 not in confidence interval, too high";
     ASSERT_TRUE(abs((ic / 1.96) - 0.025)/0.025 <= 0.05); // erreur relative inf a 5%
+
+    pnl_vect_free(&spot);
+    pnl_vect_free(&sigma);
+    pnl_vect_free(&divid);
+    pnl_rng_free(&rng);
     delete P;
+    delete bsmodel;
+    delete bOption;
+    delete mCarlo;
 }
 
 
