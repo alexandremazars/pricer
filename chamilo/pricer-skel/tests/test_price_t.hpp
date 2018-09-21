@@ -30,7 +30,7 @@ double strike = 100;
 
 PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
 
-size_t n_samples = 5000;
+size_t n_samples = 50000;
 
 BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot);
 Option *call = new CallOption(T, nbTimeSteps, size, strike);
@@ -53,8 +53,7 @@ else{
 }
 PnlMat *past = pnl_mat_create(step, size);
 pnl_mat_extract_subblock(past, callPath, 0, step,  0, size);
-//pnl_mat_print(past);
-printf("asset t\n");
+
 mCarlo->price(past, t, prix, ic);
 
 PnlVect *spot2 = pnl_vect_create(size);
@@ -64,9 +63,8 @@ double prix2 = 0;
 double ic2 = 0;
 
 BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
-Option *call2  = new CallOption(T - t, nbTimeSteps, size, strike);
+Option *call2  = new CallOption(T - t, nbTimeSteps - step, size, strike);
 MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, call2, rng, fdStep, n_samples);
-printf("asset 0\n");
 
 mCarlo2->price(prix2, ic2);
 printf("prix t: %f\n",prix );
@@ -74,8 +72,7 @@ printf("prix 0: %f\n",prix2 );
 
 /*
 ASSERT_LE(prix - ic, 4.67) << "Error, price at t=0 not in confidence interval, too low";
-ASSERT_GE(prix + ic, 4.67) << "Error, price at t=0 not in confidence interval, too high";
-ASSERT_TRUE(ic / 1.96 >= 0.029 - 0.0001 && ic / 1.96 <= 0.29 + 0.0001);*/
+ASSERT_GE(prix + ic, 4.67) << "Error, price at t=0 not in confidence interval, too high";*/
 }
 
 TEST(MonteCarlo, Asian_t){
@@ -97,7 +94,7 @@ double strike = 90;
 
 PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
 
-size_t n_samples = 5000;
+size_t n_samples = 50000;
 
 BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot);
 Option *asian = new AsianOption(T, nbTimeSteps, size, strike);
@@ -130,8 +127,8 @@ double prix2 = 0;
 double ic2 = 0;
 
 BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
-Option *call2  = new AsianOption(T - t, nbTimeSteps, size, strike);
-MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, call2, rng, fdStep, n_samples);
+Option *asian2  = new AsianOption(T - t, nbTimeSteps - step, size, strike);
+MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, asian2, rng, fdStep, n_samples);
 mCarlo2->price(prix2, ic2);
 printf("prix t: %f\n",prix );
 printf("prix 0: %f\n",prix2 );
@@ -162,7 +159,7 @@ double strike = 100;
 
 PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
 
-size_t n_samples = 5000;
+size_t n_samples = 50000;
 
 BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot);
 Option *basket = new BasketOption(T, nbTimeSteps, size, strike);
@@ -195,8 +192,8 @@ double prix2 = 0;
 double ic2 = 0;
 
 BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
-Option *call2  = new BasketOption(T - t, nbTimeSteps, size, strike);
-MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, call2, rng, fdStep, n_samples);
+Option *basket_2  = new BasketOption(T - t, nbTimeSteps - step, size, strike);
+MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, basket_2, rng, fdStep, n_samples);
 mCarlo2->price(prix2, ic2);
 printf("prix t: %f\n",prix );
 printf("prix 0: %f\n",prix2 );
@@ -258,8 +255,8 @@ double prix2 = 0;
 double ic2 = 0;
 
 BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
-Option *call2  = new BasketOption(T - t, nbTimeSteps, size, strike);
-MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, call2, rng, fdStep, n_samples);
+Option *basket1_2  = new BasketOption(T - t, nbTimeSteps - step, size, strike);
+MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, basket1_2, rng, fdStep, n_samples);
 mCarlo2->price(prix2, ic2);
 printf("prix t: %f\n",prix );
 printf("prix 0: %f\n",prix2 );
@@ -321,8 +318,8 @@ double prix2 = 0;
 double ic2 = 0;
 
 BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
-Option *call2  = new BasketOption(T - t, nbTimeSteps, size, strike);
-MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, call2, rng, fdStep, n_samples);
+Option *basket2_2  = new BasketOption(T - t, nbTimeSteps - step, size, strike);
+MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, basket2_2, rng, fdStep, n_samples);
 mCarlo2->price(prix2, ic2);
 printf("prix t: %f\n",prix );
 printf("prix 0: %f\n",prix2 );
@@ -351,7 +348,7 @@ double strike = 100;
 
 PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
 
-size_t n_samples = 5000;
+size_t n_samples = 50000;
 
 BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot);
 Option *basket2d = new BasketOption(T, nbTimeSteps, size, strike);
@@ -384,8 +381,70 @@ double prix2 = 0;
 double ic2 = 0;
 
 BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
-Option *call2  = new BasketOption(T - t, nbTimeSteps, size, strike);
-MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, call2, rng, fdStep, n_samples);
+Option *basket2d_2  = new BasketOption(T - t, nbTimeSteps - step, size, strike);
+MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, basket2d_2, rng, fdStep, n_samples);
+mCarlo2->price(prix2, ic2);
+printf("prix t: %f\n",prix );
+printf("prix 0: %f\n",prix2 );
+/*
+ASSERT_LE(prix - ic, 4.67) << "Error, price at t=0 not in confidence interval, too low";
+ASSERT_GE(prix + ic, 4.67) << "Error, price at t=0 not in confidence interval, too high";
+ASSERT_TRUE(ic / 1.96 >= 0.029 - 0.0001 && ic / 1.96 <= 0.29 + 0.0001);*/
+}
+
+TEST(MonteCarlo, Perf_t){
+
+const char *infile = "../../market-data/simul_perf.dat";
+const PnlMat *perfPath = pnl_mat_create_from_file(infile);
+
+double fdStep = 1; // valeur quelconque car non utilisee pour ce test
+
+int size = 5;
+double r = 0.03;
+double rho = 0.5;
+PnlVect *sigma = pnl_vect_create_from_scalar(size,0.200000);
+PnlVect *spot = pnl_vect_create_from_scalar(size,100.000000);
+
+double T = 2.000000;
+int nbTimeSteps = 96;
+
+PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
+
+size_t n_samples = 50000;
+
+BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot);
+Option *perf = new PerformanceOption(T, nbTimeSteps, size);
+
+pnl_rng_init(rng, PNL_RNG_MERSENNE);
+pnl_rng_sseed(rng, time(NULL));
+
+MonteCarlo *mCarlo = new MonteCarlo(bsmodel, perf, rng, fdStep, n_samples);
+
+double prix = 0.0;
+double ic = 0.0;
+double t = 0.1;
+double step_1 = t * nbTimeSteps / T ;
+double step = floor(t * nbTimeSteps / T);
+if (step == step_1) {
+step += 1 ;
+}
+else{
+step += 2 ;
+}
+PnlMat *past = pnl_mat_create(step, size);
+pnl_mat_extract_subblock(past, perfPath, 0, step,  0, size);
+//pnl_mat_print(past);
+mCarlo->price(past, t, prix, ic);
+
+PnlVect *spot2 = pnl_vect_create(size);
+pnl_mat_get_row(spot2, past, (int) (past->m - 1));
+
+double prix2 = 0;
+double ic2 = 0;
+
+BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
+Option *perf2  = new PerformanceOption(T - t, nbTimeSteps - step, size);
+MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, perf2, rng, fdStep, n_samples);
 mCarlo2->price(prix2, ic2);
 printf("prix t: %f\n",prix );
 printf("prix 0: %f\n",prix2 );
