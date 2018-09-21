@@ -5,7 +5,7 @@
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 
-TEST(MonteCarlo, Basket1){
+TEST(MonteCarlo, Basket1_price_0){
     double fdStep = 1;
     double T, r, strike, correlation;
     PnlVect *spot, *sigma, *divid;

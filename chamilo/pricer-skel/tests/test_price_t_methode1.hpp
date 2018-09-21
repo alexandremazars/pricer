@@ -11,7 +11,7 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 
-TEST(MonteCarlo, Call_t){
+TEST(MonteCarlo, Call_price_t){
 
 const char *infile = "../../market-data/simul_call.dat";
 const PnlMat *callPath = pnl_mat_create_from_file(infile);
@@ -67,15 +67,12 @@ Option *call2  = new CallOption(T - t, nbTimeSteps - step, size, strike);
 MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, call2, rng, fdStep, n_samples);
 
 mCarlo2->price(prix2, ic2);
-printf("prix t: %f\n",prix );
-printf("prix 0: %f\n",prix2 );
 
-/*
-ASSERT_LE(prix - ic, 4.67) << "Error, price at t=0 not in confidence interval, too low";
-ASSERT_GE(prix + ic, 4.67) << "Error, price at t=0 not in confidence interval, too high";*/
+ASSERT_TRUE(abs(prix-prix2)/prix2 <= 0.05); // ecart relatif inf a 5%
+
 }
 
-TEST(MonteCarlo, Asian_t){
+TEST(MonteCarlo, Asian_price_t){
 
 const char *infile = "../../market-data/simul_asian.dat";
 const PnlMat *asianPath = pnl_mat_create_from_file(infile);
@@ -130,17 +127,14 @@ BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
 Option *asian2  = new AsianOption(T - t, nbTimeSteps - step, size, strike);
 MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, asian2, rng, fdStep, n_samples);
 mCarlo2->price(prix2, ic2);
-printf("prix t: %f\n",prix );
-printf("prix 0: %f\n",prix2 );
 
-/*ASSERT_LE(prix - ic, 4.67) << "Error, price at t=0 not in confidence interval, too low";
-ASSERT_GE(prix + ic, 4.67) << "Error, price at t=0 not in confidence interval, too high";
-ASSERT_TRUE(ic / 1.96 >= 0.029 - 0.0001 && ic / 1.96 <= 0.29 + 0.0001);*/
+ASSERT_TRUE(abs(prix-prix2)/prix2 <= 0.05); // ecart relatif inf a 5%
+
 }
 
 
 
-TEST(MonteCarlo, Basket_t){
+TEST(MonteCarlo, Basket_price_t){
 
 const char *infile = "../../market-data/simul_basket.dat";
 const PnlMat *basketPath = pnl_mat_create_from_file(infile);
@@ -171,7 +165,7 @@ MonteCarlo *mCarlo = new MonteCarlo(bsmodel, basket, rng, fdStep, n_samples);
 
 double prix = 0.0;
 double ic = 0.0;
-double t = 10.0/365.0;
+double t = 0.1;
 double step_1 = t * nbTimeSteps / T ;
 double step = floor(t * nbTimeSteps / T);
 if (step == step_1) {
@@ -195,15 +189,12 @@ BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
 Option *basket_2  = new BasketOption(T - t, nbTimeSteps - step, size, strike);
 MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, basket_2, rng, fdStep, n_samples);
 mCarlo2->price(prix2, ic2);
-printf("prix t: %f\n",prix );
-printf("prix 0: %f\n",prix2 );
-/*
-ASSERT_LE(prix - ic, 4.67) << "Error, price at t=0 not in confidence interval, too low";
-ASSERT_GE(prix + ic, 4.67) << "Error, price at t=0 not in confidence interval, too high";
-ASSERT_TRUE(ic / 1.96 >= 0.029 - 0.0001 && ic / 1.96 <= 0.29 + 0.0001);*/
+
+ASSERT_TRUE(abs(prix-prix2)/prix2 <= 0.05); // ecart relatif inf a 5%
+
 }
 
-TEST(MonteCarlo, Basket_1_t){
+TEST(MonteCarlo, Basket_1_price_t){
 
 const char *infile = "../../market-data/simul_basket_1.dat";
 const PnlMat *basket1Path = pnl_mat_create_from_file(infile);
@@ -258,15 +249,12 @@ BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
 Option *basket1_2  = new BasketOption(T - t, nbTimeSteps - step, size, strike);
 MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, basket1_2, rng, fdStep, n_samples);
 mCarlo2->price(prix2, ic2);
-printf("prix t: %f\n",prix );
-printf("prix 0: %f\n",prix2 );
-/*
-ASSERT_LE(prix - ic, 4.67) << "Error, price at t=0 not in confidence interval, too low";
-ASSERT_GE(prix + ic, 4.67) << "Error, price at t=0 not in confidence interval, too high";
-ASSERT_TRUE(ic / 1.96 >= 0.029 - 0.0001 && ic / 1.96 <= 0.29 + 0.0001);*/
+
+ASSERT_TRUE(abs(prix-prix2)/prix2 <= 0.05); // ecart relatif inf a 5%
+
 }
 
-TEST(MonteCarlo, Basket_2_t){
+TEST(MonteCarlo, Basket_2_price_t){
 
 const char *infile = "../../market-data/simul_basket_2.dat";
 const PnlMat *basket2Path = pnl_mat_create_from_file(infile);
@@ -321,15 +309,12 @@ BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
 Option *basket2_2  = new BasketOption(T - t, nbTimeSteps - step, size, strike);
 MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, basket2_2, rng, fdStep, n_samples);
 mCarlo2->price(prix2, ic2);
-printf("prix t: %f\n",prix );
-printf("prix 0: %f\n",prix2 );
-/*
-ASSERT_LE(prix - ic, 4.67) << "Error, price at t=0 not in confidence interval, too low";
-ASSERT_GE(prix + ic, 4.67) << "Error, price at t=0 not in confidence interval, too high";
-ASSERT_TRUE(ic / 1.96 >= 0.029 - 0.0001 && ic / 1.96 <= 0.29 + 0.0001);*/
+
+ASSERT_TRUE(abs(prix-prix2)/prix2 <= 0.05); // ecart relatif inf a 5%
+
 }
 
-TEST(MonteCarlo, Basket_2d_t){
+TEST(MonteCarlo, Basket_2d_price_t){
 
 const char *infile = "../../market-data/simul_basket_2d.dat";
 const PnlMat *basket2dPath = pnl_mat_create_from_file(infile);
@@ -384,15 +369,12 @@ BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
 Option *basket2d_2  = new BasketOption(T - t, nbTimeSteps - step, size, strike);
 MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, basket2d_2, rng, fdStep, n_samples);
 mCarlo2->price(prix2, ic2);
-printf("prix t: %f\n",prix );
-printf("prix 0: %f\n",prix2 );
-/*
-ASSERT_LE(prix - ic, 4.67) << "Error, price at t=0 not in confidence interval, too low";
-ASSERT_GE(prix + ic, 4.67) << "Error, price at t=0 not in confidence interval, too high";
-ASSERT_TRUE(ic / 1.96 >= 0.029 - 0.0001 && ic / 1.96 <= 0.29 + 0.0001);*/
+
+ASSERT_TRUE(abs(prix-prix2)/prix2 <= 0.05); // ecart relatif inf a 5%
+
 }
 
-TEST(MonteCarlo, Perf_t){
+TEST(MonteCarlo, Perf_price_t){
 
 const char *infile = "../../market-data/simul_perf.dat";
 const PnlMat *perfPath = pnl_mat_create_from_file(infile);
@@ -446,12 +428,9 @@ BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
 Option *perf2  = new PerformanceOption(T - t, nbTimeSteps - step, size);
 MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, perf2, rng, fdStep, n_samples);
 mCarlo2->price(prix2, ic2);
-printf("prix t: %f\n",prix );
-printf("prix 0: %f\n",prix2 );
-/*
-ASSERT_LE(prix - ic, 4.67) << "Error, price at t=0 not in confidence interval, too low";
-ASSERT_GE(prix + ic, 4.67) << "Error, price at t=0 not in confidence interval, too high";
-ASSERT_TRUE(ic / 1.96 >= 0.029 - 0.0001 && ic / 1.96 <= 0.29 + 0.0001);*/
+
+ASSERT_TRUE(abs(prix-prix2)/prix2 <= 0.05); // ecart relatif inf a 5%
+
 }
 
 #endif //MC_PRICER_TEST_PRICE_T_H
