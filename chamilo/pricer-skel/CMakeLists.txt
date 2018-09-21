@@ -52,7 +52,11 @@ add_executable(mc-example src/mc_example.cpp src/MonteCarlo.cpp src/MonteCarlo.h
         src/CallOption.cpp src/CallOption.hpp )
 target_link_libraries(mc-example jl_parser ${LIBS})
 
-
+#Pricer
+add_executable(pricer src/pricer.cpp src/MonteCarlo.cpp src/MonteCarlo.hpp src/BlackScholesModel.cpp src/BlackScholesModel.hpp src/Option.cpp src/Option.hpp
+        src/BasketOption.cpp src/BasketOption.hpp src/AsianOption.cpp src/AsianOption.hpp src/PerformanceOption.cpp src/PerformanceOption.hpp
+        src/CallOption.cpp src/CallOption.hpp)
+target_link_libraries(pricer jl_parser ${LIBS})
 
 # Print compiler flags
 get_directory_property(DirDefs COMPILE_DEFINITIONS)
