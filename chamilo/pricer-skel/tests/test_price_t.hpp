@@ -30,7 +30,7 @@ double strike = 100;
 
 PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
 
-size_t n_samples = 50000;
+size_t n_samples = 5000;
 
 BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot);
 Option *call = new CallOption(T, nbTimeSteps, size, strike);
@@ -47,12 +47,20 @@ double step = floor(t * nbTimeSteps / T) + 1;
 PnlMat *past = pnl_mat_create(step, size);
 pnl_mat_extract_subblock(past, callPath, 0, step,  0, size);
 //pnl_mat_print(past);
+printf("asset t\n");
 mCarlo->price(past, t, prix, ic);
+
+PnlVect *spot2 = pnl_vect_create(size);
+pnl_mat_get_row(spot2, past, (int) (past->m - 1));
 
 double prix2 = 0;
 double ic2 = 0;
+
+BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
 Option *call2  = new CallOption(T - t, nbTimeSteps, size, strike);
-MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel, call2, rng, fdStep, n_samples);
+MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, call2, rng, fdStep, n_samples);
+printf("asset 0\n");
+
 mCarlo2->price(prix2, ic2);
 printf("prix t: %f\n",prix );
 printf("prix 0: %f\n",prix2 );
@@ -63,7 +71,7 @@ ASSERT_GE(prix + ic, 4.67) << "Error, price at t=0 not in confidence interval, t
 ASSERT_TRUE(ic / 1.96 >= 0.029 - 0.0001 && ic / 1.96 <= 0.29 + 0.0001);*/
 }
 
-/*TEST(MonteCarlo, Asian_t){
+TEST(MonteCarlo, Asian_t){
 
 const char *infile = "../../market-data/simul_asian.dat";
 const PnlMat *asianPath = pnl_mat_create_from_file(infile);
@@ -82,7 +90,7 @@ double strike = 90;
 
 PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
 
-size_t n_samples = 50000;
+size_t n_samples = 5000;
 
 BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot);
 Option *asian = new AsianOption(T, nbTimeSteps, size, strike);
@@ -94,20 +102,34 @@ MonteCarlo *mCarlo = new MonteCarlo(bsmodel, asian, rng, fdStep, n_samples);
 
 double prix = 0.0;
 double ic = 0.0;
-double t = 50;
-PnlMat *past = pnl_mat_create(t, size);
-pnl_mat_extract_subblock(past, asianPath, 0, t+1, 0, size);
+double t = 0.1;
+double step = floor(t * nbTimeSteps / T) + 1;
+PnlMat *past = pnl_mat_create(step, size);
+pnl_mat_extract_subblock(past, asianPath, 0, step,  0, size);
+//pnl_mat_print(past);
+mCarlo->price(past, t, prix, ic);
 
-//mCarlo->price(past, t, prix, ic);
-/*
-ASSERT_LE(prix - ic, 4.67) << "Error, price at t=0 not in confidence interval, too low";
+PnlVect *spot2 = pnl_vect_create(size);
+pnl_mat_get_row(spot2, past, (int) (past->m - 1));
+
+double prix2 = 0;
+double ic2 = 0;
+
+BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
+Option *call2  = new AsianOption(T - t, nbTimeSteps, size, strike);
+MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, call2, rng, fdStep, n_samples);
+mCarlo2->price(prix2, ic2);
+printf("prix t: %f\n",prix );
+printf("prix 0: %f\n",prix2 );
+
+/*ASSERT_LE(prix - ic, 4.67) << "Error, price at t=0 not in confidence interval, too low";
 ASSERT_GE(prix + ic, 4.67) << "Error, price at t=0 not in confidence interval, too high";
 ASSERT_TRUE(ic / 1.96 >= 0.029 - 0.0001 && ic / 1.96 <= 0.29 + 0.0001);*/
-//}
+}
 
 
 
-/*TEST(MonteCarlo, Basket_t){
+TEST(MonteCarlo, Basket_t){
 
 const char *infile = "../../market-data/simul_basket.dat";
 const PnlMat *basketPath = pnl_mat_create_from_file(infile);
@@ -126,7 +148,7 @@ double strike = 100;
 
 PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
 
-size_t n_samples = 50000;
+size_t n_samples = 5000;
 
 BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot);
 Option *basket = new BasketOption(T, nbTimeSteps, size, strike);
@@ -138,18 +160,32 @@ MonteCarlo *mCarlo = new MonteCarlo(bsmodel, basket, rng, fdStep, n_samples);
 
 double prix = 0.0;
 double ic = 0.0;
-double t = 50;
-PnlMat *past = pnl_mat_create(t, size);
-pnl_mat_extract_subblock(past, basketPath, 0, t+1, 0, size);
+double t = 0.1;
+double step = floor(t * nbTimeSteps / T) + 1;
+PnlMat *past = pnl_mat_create(step, size);
+pnl_mat_extract_subblock(past, basketPath, 0, step,  0, size);
+//pnl_mat_print(past);
+mCarlo->price(past, t, prix, ic);
 
-//mCarlo->price(past, t, prix, ic);
+PnlVect *spot2 = pnl_vect_create(size);
+pnl_mat_get_row(spot2, past, (int) (past->m - 1));
+
+double prix2 = 0;
+double ic2 = 0;
+
+BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
+Option *call2  = new BasketOption(T - t, nbTimeSteps, size, strike);
+MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, call2, rng, fdStep, n_samples);
+mCarlo2->price(prix2, ic2);
+printf("prix t: %f\n",prix );
+printf("prix 0: %f\n",prix2 );
 /*
 ASSERT_LE(prix - ic, 4.67) << "Error, price at t=0 not in confidence interval, too low";
 ASSERT_GE(prix + ic, 4.67) << "Error, price at t=0 not in confidence interval, too high";
 ASSERT_TRUE(ic / 1.96 >= 0.029 - 0.0001 && ic / 1.96 <= 0.29 + 0.0001);*/
-//}
+}
 
-/*TEST(MonteCarlo, Basket_1_t){
+TEST(MonteCarlo, Basket_1_t){
 
 const char *infile = "../../market-data/simul_basket_1.dat";
 const PnlMat *basket1Path = pnl_mat_create_from_file(infile);
@@ -168,7 +204,7 @@ double strike = 100;
 
 PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
 
-size_t n_samples = 50000;
+size_t n_samples = 5000;
 
 BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot);
 Option *basket1 = new BasketOption(T, nbTimeSteps, size, strike);
@@ -180,18 +216,32 @@ MonteCarlo *mCarlo = new MonteCarlo(bsmodel, basket1, rng, fdStep, n_samples);
 
 double prix = 0.0;
 double ic = 0.0;
-double t = 50;
-PnlMat *past = pnl_mat_create(t, size);
-pnl_mat_extract_subblock(past, basket1Path, 0, t+1, 0, size);
+double t = 0.1;
+double step = floor(t * nbTimeSteps / T) + 1;
+PnlMat *past = pnl_mat_create(step, size);
+pnl_mat_extract_subblock(past, basket1Path, 0, step,  0, size);
+//pnl_mat_print(past);
+mCarlo->price(past, t, prix, ic);
 
-//mCarlo->price(past, t, prix, ic);
+PnlVect *spot2 = pnl_vect_create(size);
+pnl_mat_get_row(spot2, past, (int) (past->m - 1));
+
+double prix2 = 0;
+double ic2 = 0;
+
+BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
+Option *call2  = new BasketOption(T - t, nbTimeSteps, size, strike);
+MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, call2, rng, fdStep, n_samples);
+mCarlo2->price(prix2, ic2);
+printf("prix t: %f\n",prix );
+printf("prix 0: %f\n",prix2 );
 /*
 ASSERT_LE(prix - ic, 4.67) << "Error, price at t=0 not in confidence interval, too low";
 ASSERT_GE(prix + ic, 4.67) << "Error, price at t=0 not in confidence interval, too high";
 ASSERT_TRUE(ic / 1.96 >= 0.029 - 0.0001 && ic / 1.96 <= 0.29 + 0.0001);*/
-//}
+}
 
-/*TEST(MonteCarlo, Basket_2_t){
+TEST(MonteCarlo, Basket_2_t){
 
 const char *infile = "../../market-data/simul_basket_2.dat";
 const PnlMat *basket2Path = pnl_mat_create_from_file(infile);
@@ -210,7 +260,7 @@ double strike = 100;
 
 PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
 
-size_t n_samples = 50000;
+size_t n_samples = 5000;
 
 BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot);
 Option *basket2 = new BasketOption(T, nbTimeSteps, size, strike);
@@ -222,18 +272,32 @@ MonteCarlo *mCarlo = new MonteCarlo(bsmodel, basket2, rng, fdStep, n_samples);
 
 double prix = 0.0;
 double ic = 0.0;
-double t = 50;
-PnlMat *past = pnl_mat_create(t, size);
-pnl_mat_extract_subblock(past, basket2Path, 0, t+1, 0, size);
+double t = 0.1;
+double step = floor(t * nbTimeSteps / T) + 1;
+PnlMat *past = pnl_mat_create(step, size);
+pnl_mat_extract_subblock(past, basket2Path, 0, step,  0, size);
+//pnl_mat_print(past);
+mCarlo->price(past, t, prix, ic);
 
-//mCarlo->price(past, t, prix, ic);
+PnlVect *spot2 = pnl_vect_create(size);
+pnl_mat_get_row(spot2, past, (int) (past->m - 1));
+
+double prix2 = 0;
+double ic2 = 0;
+
+BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
+Option *call2  = new BasketOption(T - t, nbTimeSteps, size, strike);
+MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, call2, rng, fdStep, n_samples);
+mCarlo2->price(prix2, ic2);
+printf("prix t: %f\n",prix );
+printf("prix 0: %f\n",prix2 );
 /*
 ASSERT_LE(prix - ic, 4.67) << "Error, price at t=0 not in confidence interval, too low";
 ASSERT_GE(prix + ic, 4.67) << "Error, price at t=0 not in confidence interval, too high";
 ASSERT_TRUE(ic / 1.96 >= 0.029 - 0.0001 && ic / 1.96 <= 0.29 + 0.0001);*/
-//}
+}
 
-/*TEST(MonteCarlo, Basket_2d_t){
+TEST(MonteCarlo, Basket_2d_t){
 
 const char *infile = "../../market-data/simul_basket_2d.dat";
 const PnlMat *basket2dPath = pnl_mat_create_from_file(infile);
@@ -252,7 +316,7 @@ double strike = 100;
 
 PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
 
-size_t n_samples = 50000;
+size_t n_samples = 5000;
 
 BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot);
 Option *basket2d = new BasketOption(T, nbTimeSteps, size, strike);
@@ -264,15 +328,29 @@ MonteCarlo *mCarlo = new MonteCarlo(bsmodel, basket2d, rng, fdStep, n_samples);
 
 double prix = 0.0;
 double ic = 0.0;
-double t = 50;
-PnlMat *past = pnl_mat_create(t, size);
-pnl_mat_extract_subblock(past, basket2dPath, 0, t+1, 0, size);
+double t = 0.1;
+double step = floor(t * nbTimeSteps / T) + 1;
+PnlMat *past = pnl_mat_create(step, size);
+pnl_mat_extract_subblock(past, basket2dPath, 0, step,  0, size);
+//pnl_mat_print(past);
+mCarlo->price(past, t, prix, ic);
 
-//mCarlo->price(past, t, prix, ic);
+PnlVect *spot2 = pnl_vect_create(size);
+pnl_mat_get_row(spot2, past, (int) (past->m - 1));
+
+double prix2 = 0;
+double ic2 = 0;
+
+BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2);
+Option *call2  = new BasketOption(T - t, nbTimeSteps, size, strike);
+MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, call2, rng, fdStep, n_samples);
+mCarlo2->price(prix2, ic2);
+printf("prix t: %f\n",prix );
+printf("prix 0: %f\n",prix2 );
 /*
 ASSERT_LE(prix - ic, 4.67) << "Error, price at t=0 not in confidence interval, too low";
 ASSERT_GE(prix + ic, 4.67) << "Error, price at t=0 not in confidence interval, too high";
 ASSERT_TRUE(ic / 1.96 >= 0.029 - 0.0001 && ic / 1.96 <= 0.29 + 0.0001);*/
-//}
+}
 
 #endif //MC_PRICER_TEST_PRICE_T_H

@@ -88,17 +88,14 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
     pnl_mat_chol(mat_Chol);
 
     //nbSteps correspondant
-    double nbSteps = 0.0;
-    while (nbSteps * delta_t <= t) {
-      nbSteps += 1;
-    }
+    double nbSteps = floor(t * nbTimeSteps / T) + 1;
 
     //simuler les vecteurs gaussien
-    PnlMat *suite_Gauss = pnl_mat_create(nbTimeSteps - nbSteps + 2, size_);
+    PnlMat *suite_Gauss = pnl_mat_create(nbTimeSteps - nbSteps + 1, size_);
     PnlVect *G = pnl_vect_new();
     for (int d = 0; d < size_; ++d) {
         G = pnl_vect_new();
-        pnl_vect_rng_normal(G, nbTimeSteps - nbSteps + 2, rng);
+        pnl_vect_rng_normal(G, nbTimeSteps - nbSteps + 1, rng);
         pnl_mat_set_col(suite_Gauss, G, d);
     }
     //Calcul des prix
@@ -106,7 +103,7 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
     PnlVect *row_Gauss = pnl_vect_create(size_);
     double produitScalaire;
     //mettre dans path les valeurs de past
-    for (int j = 0; j < nbSteps - 1; ++j) {
+    for (int j = 0; j < nbSteps; ++j) {
         PnlVect *price_i = pnl_vect_create(size_);
         pnl_mat_get_row(price_i, past, j);
         pnl_mat_set_row(path, price_i, j);
@@ -114,32 +111,32 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
 
     //Simulées les valeurs suivantes
     for (int d = 0; d < size_ ; ++d) {
-        double prix_Prec = pnl_mat_get(past,nbSteps-1,d);
+        double prix_Prec = pnl_mat_get(past, nbSteps - 1, d);
         double prix = prix_Prec;
         double cours_prec = 1;
         double cours = 0;
         double sigma = pnl_vect_get(sigma_, d);
-        pnl_mat_get_row(row_Chol, mat_Chol, d);
-
-        for (int i = 0; i < nbTimeSteps - nbSteps + 2; ++i) {
-            pnl_mat_get_row(row_Gauss, suite_Gauss, i);
-            double brownien = pnl_mat_get(suite_Gauss, i, d);
-            //produitScalaire = pnl_vect_scalar_prod(row_Gauss, row_Chol);
-            cours = cours_prec * exp((r_-(pow(sigma,2))/2)* delta_t * (i+1)  +  brownien *sigma * sqrt(delta_t));
+        pnl_mat_get_row(row_Chol, mat_Chol,d);
+        for (int i = 0; i < nbTimeSteps - nbSteps; ++i) {
+            pnl_mat_get_row(row_Gauss, suite_Gauss, i + 1);
+            produitScalaire = pnl_vect_scalar_prod(row_Gauss, row_Chol);
+            //double brownien = pnl_mat_get(suite_Gauss, i, d);
+            cours = cours_prec * exp((r_-(pow(sigma,2))/2)* delta_t   +  produitScalaire * sigma * sqrt(delta_t));
             prix = prix_Prec * cours;
             cours_prec = cours;
-            //prix = prix_Prec * exp((r_-(pow(sigma,2))/2)* delta_t * (i+1)  + produitScalaire * sigma * sqrt(delta_t));
-            pnl_mat_set(path, (i+ nbSteps-1), d, prix);
+            pnl_mat_set(path, ( i + nbSteps), d, prix);
         }
+        //printf("prix %f\n",prix );
     }
-    //pnl_mat_print(path);
+
+
 
     // Free
     //pnl_vect_free(&price_i);
     pnl_vect_free(&row_Chol);
+    pnl_mat_free(&mat_Chol);
     pnl_vect_free(&row_Gauss);
     pnl_mat_free(&suite_Gauss);
-    pnl_mat_free(&mat_Chol);
     pnl_mat_free(&mat_Cor);
     pnl_vect_free(&G);
 }
