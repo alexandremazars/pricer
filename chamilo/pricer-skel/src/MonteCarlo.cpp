@@ -104,17 +104,13 @@ void MonteCarlo::listPrice(PnlVect *listPrice, PnlMat *marketPrice, int H, int s
         PnlMat *past = pnl_mat_create(1, size);
         PnlVect *value_h = pnl_vect_create(size);
         pnl_mat_extract_subblock(past, marketPrice, 0, 1,  0, size);
-        for (int i = 0; i < H + 1; i++) {
-                if (i == 0) {
-                        price(price_h, ic);
-                        pnl_vect_set(listPrice, price_h, i);
-                }
-                else{
-                        pnl_mat_get_row(value_h, marketPrice, i);
-                        pnl_mat_add_row(past, i, value_h);
-                        price(past,i*delta_h, price_h, ic);
-                        pnl_vect_set(listPrice, price_h, i);
-                }
+        price(price_h, ic);
+        pnl_vect_set(listPrice, price_h, 0);
+        for (int i = 1; i < H + 1; i++) {
+          pnl_mat_get_row(value_h, marketPrice, i);
+          pnl_mat_add_row(past, i, value_h);
+          price(past,i*delta_h, price_h, ic);
+          pnl_vect_set(listPrice, price_h, i);
         }
         pnl_vect_free(&value_h);
         pnl_mat_free(&past);
