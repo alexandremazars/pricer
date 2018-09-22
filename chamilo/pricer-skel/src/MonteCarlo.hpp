@@ -56,5 +56,5 @@ public:
      */
     void listPrice(PnlVect *listPrice, PnlMat *marketPrice, int H, int size);
     void matDelta(PnlMat *matDelta,PnlMat *marketPrice, int H, int size);
-    void listHedge(PnlMat *listHedge,PnlMat *marketPrice);
+    void listHedge(PnlVect *listHedge,PnlMat *marketPrice);
 };
