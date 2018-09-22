@@ -109,7 +109,7 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
 
     //Simuler les valeurs suivantes
     for (int d = 0; d < size_ ; ++d) {
-        double prix_Prec = pnl_mat_get(past, nbSteps - 1, d);
+        double prix_Prec = pnl_mat_get(past, past->m - 1, d);
         double prix = 0;
         double cours_prec = 1;
         double cours = 0;
@@ -136,15 +136,17 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
 void BlackScholesModel::shiftAsset(PnlMat *shift_path, const PnlMat *path, int d, double h, double t, double timestep){
 
     int nbTimeSteps = path->m;
-    // Retourne i tel que Ti < t < Ti+1
-    int nbSteps = 0;
-    while (nbSteps * timestep < t) {
-      nbSteps += 1;
+
+    //nbSteps correspondant
+    double step_1 = t/timestep;
+    double nbSteps = floor(t/timestep);
+    if (nbSteps != step_1) {
+      nbSteps += 1 ;
     }
 
     pnl_mat_clone(shift_path, path);
 
-    for (int i = nbSteps + 1; i < nbTimeSteps; i++) {
+    for (int i = nbSteps; i < nbTimeSteps; i++) {
       pnl_mat_set(shift_path, i , d, (1+h) * pnl_mat_get(path, i , d));
     }
 }

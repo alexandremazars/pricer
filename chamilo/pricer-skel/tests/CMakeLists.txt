@@ -19,3 +19,6 @@ add_executable(delta main_delta.cpp ${SOURCESTEST} ${HEADERSTEST})
 target_link_libraries(delta gtest gtest_main ${LIBS})
 target_link_libraries(delta jl_parser ${LIBS})
 
+add_executable(hedge main_hedge.cpp  ${SOURCESTEST} ${HEADERSTEST})
+target_link_libraries(hedge gtest gtest_main ${LIBS})
+target_link_libraries(hedge jl_parser ${LIBS})

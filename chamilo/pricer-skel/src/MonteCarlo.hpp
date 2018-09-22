@@ -54,7 +54,6 @@ public:
      * @param[out] listPrice contient le prix des options à differents instants
      * @param[in] marketPrice contient la disposition des trajectoires de marché
      */
-    void listPrice(PnlVect *listPrice, PnlMat *marketPrice, int H, int size);
-    void matDelta(PnlMat *matDelta,PnlMat *marketPrice, int H, int size);
+    void PriceDelta(PnlVect *listPrice, PnlMat *matDelta, PnlMat *marketPrice, int H);
     void listHedge(PnlVect *listHedge,PnlMat *marketPrice);
 };

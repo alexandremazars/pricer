@@ -16,10 +16,10 @@ double AsianOption::payoff(const PnlMat *path) {
     double sum_N;
     for (int d = 0; d < size_; ++d) {
         sum_N = 0;
-        for (int i = 0; i < nbTimeSteps_ + 1; ++i) {
+        for (int i = 0; i < path->m ; ++i) {
             sum_N += pnl_mat_get(path, i, d);
         }
-        sum += sum_N / (size_ * (nbTimeSteps_+1) );
+        sum += sum_N / (size_ * (path->m) );
     }
     return fmax(sum-strike_, 0);
 }

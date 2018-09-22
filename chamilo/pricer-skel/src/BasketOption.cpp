@@ -15,7 +15,7 @@ BasketOption::BasketOption(double T, int nbTimeSteps, int size, double strike){
 double BasketOption::payoff(const PnlMat *path) {
     double sum = 0;
     for (int d = 0; d < size_; ++d) {
-        sum += pnl_mat_get(path, nbTimeSteps_, d);
+        sum += pnl_mat_get(path, path->m - 1, d);
     }
     sum = sum / size_;
     return fmax(sum-strike_, 0);
