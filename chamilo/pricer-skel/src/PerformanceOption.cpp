@@ -28,14 +28,13 @@ PerformanceOption::PerformanceOption(double T, int nbTimeSteps, int size, PnlVec
  */
 double PerformanceOption::payoff(const PnlMat *path) {
     double sum_N = 0;
+    PnlVect *price_i = pnl_vect_create(size_);
+    PnlVect *price_i1 = pnl_vect_create(size_);
     for (int i = 1; i < path->m ; ++i) {
-        double sum_num = 0;
-        double sum_denom = 0;
-        for (int d = 0; d < size_; ++d) {
-            sum_num += pnl_mat_get(path, i, d);
-            sum_denom += pnl_mat_get(path, i-1, d);
-        }
-        sum_N += fmax(sum_num/sum_denom - 1, 0);
+      pnl_mat_get_row(price_i, path, i);
+      pnl_mat_get_row(price_i1, path, i-1);
+      double rapport = pnl_vect_scalar_prod(weights_, price_i)/pnl_vect_scalar_prod(weights_, price_i1) ;
+      sum_N += fmax(rapport - 1, 0);
     }
     return 1 + sum_N;
 }

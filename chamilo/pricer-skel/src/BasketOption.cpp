@@ -29,10 +29,9 @@ BasketOption::BasketOption(double T, int nbTimeSteps, int size, PnlVect* weights
  * @return phi(trajectoire)
  */
 double BasketOption::payoff(const PnlMat *path) {
-    double sum = 0;
-    for (int d = 0; d < size_; ++d) {
-        sum += pnl_mat_get(path, path->m - 1, d);
-    }
-    sum = sum / size_;
+    PnlVect *lastValue = pnl_vect_create(size_);
+    pnl_mat_get_row(lastValue, path, path->m - 1);
+    double sum = pnl_vect_scalar_prod(weights_, lastValue);
+    pnl_vect_free(&lastValue);
     return fmax(sum-strike_, 0);
 }

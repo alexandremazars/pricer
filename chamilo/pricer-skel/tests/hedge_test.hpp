@@ -72,6 +72,8 @@ TEST(MonteCarlo, pnlAsian){
   PnlVect *spot = pnl_vect_create_from_scalar(size,100.000000);
   PnlVect *trend = pnl_vect_create_from_scalar(size, 0.1);
 
+  PnlVect *weights = pnl_vect_create_from_scalar(1, 1.0);
+
   double T = 2;
   int nbTimeSteps = 26;
   int H = 104;

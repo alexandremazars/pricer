@@ -16,16 +16,16 @@ int main(int argc, char **argv)
 {
     clock_t t1, t2, t3, t4;
     t1=clock();
-    double fdStep = 1;
+    double fdStep = 0.1;
     double T, r, strike, correlation;
     PnlVect *spot, *sigma, *divid, *payoff_coef;
     string type;
     int size, timestep, hedging_dates_number;
     size_t n_samples;
     char *infile, *market_file;
-    if (argc >= 5 || argc == 3){     
+    if (argc >= 5 || argc == 3){
         throw std::invalid_argument( "Invalid number of arguments for function" );
-    } else if (argc == 2){  
+    } else if (argc == 2){
         infile = argv[1];
     } else if (argc == 4){
         if (strcmp(argv[1], "-c") != 0){
@@ -37,9 +37,9 @@ int main(int argc, char **argv)
             printf("t'es là ou t'es pas là?\n");
 
     }
- 
+
     Param *P = new Parser(infile);
-    
+    printf("parser launched\n");
     P->extract("option type", type);
     P->extract("maturity", T);
     P->extract("option size", size);
@@ -59,6 +59,7 @@ int main(int argc, char **argv)
     P->extract("hedging dates number", hedging_dates_number);
     P->extract("payoff coefficients", payoff_coef, size);
     PnlVect* trend = pnl_vect_create_from_zero(size);
+
 
     Option* opt;
 
@@ -103,7 +104,7 @@ int main(int argc, char **argv)
     float diff2 ((float)t3-(float)t1);
     float seconds2 = diff2 / CLOCKS_PER_SEC;
     printf("%f sec\n==============\n", seconds2);
-    
+
     PnlMat *market = pnl_mat_create_from_file(market_file);
     double pnl = 0;
     mCarlo->pnl(pnl, market, hedging_dates_number);
