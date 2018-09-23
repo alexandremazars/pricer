@@ -3,8 +3,18 @@
 //
 
 #include "MonteCarlo.hpp"
+
 using namespace std;
 
+/**
+* Constructeur de la classe
+* param[in]
+* BlackScholesModel *mod : pointeur vers le modèle
+* Option *opt : pointeur sur l'option
+* PnlRng *rng : pointeur sur le générateur
+* double fdStep : pas de différence finie
+* size_t nbSamples : nombre de tirages Monte Carlo
+*/
 MonteCarlo::MonteCarlo(BlackScholesModel *mod, Option *opt, PnlRng *rng, double fdStep, int nbSamples){
     mod_ = mod;
     opt_ = opt;

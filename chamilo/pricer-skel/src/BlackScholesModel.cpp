@@ -4,6 +4,15 @@
 
 #include "BlackScholesModel.hpp"
 
+/**
+* Constructeur de la classe
+* @param[in]
+* int size : nombre d'actifs du modèle
+* double r : taux d'intérêt
+* double rho : paramètre de corrélation
+* PnlVect *sigma : vecteur de volatilités
+* PnlVect *spot : valeurs initiales des sous-jacents
+*/
 BlackScholesModel::BlackScholesModel(int size, double r, double rho, PnlVect *sigma, PnlVect *spot){
     size_ = size;
     r_ = r;

@@ -23,5 +23,3 @@ public:
     virtual double payoff(const PnlMat *path) = 0;
     virtual ~Option() = default;
 };
-
-

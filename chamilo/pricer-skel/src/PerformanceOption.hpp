@@ -4,9 +4,18 @@
 
 #include "Option.hpp"
 
+/// \brief Option Performance hérite de la classe abstraite option
 class PerformanceOption : public Option {
 public:
 
+    /**
+    * Constructeur de la classe
+    * @param[in]
+    * double T : maturité
+    * int nbTimeSteps : nombre de pas de temps de discrétisation
+    * int size : dimension du modèle
+    * double strike : prix d'exercice de l'option
+    */
     PerformanceOption(double T, int nbTimeSteps, int size);
 
     /**

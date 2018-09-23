@@ -4,12 +4,21 @@
 
 #include "Option.hpp"
 
+/// \brief Option Asiatique hérite de la classe abstraite option
 class AsianOption : public Option
 {
 public:
 
-    double strike_;
+    double strike_; /// Prix d'exercice de l'option asiatique
 
+    /**
+    * Constructeur de la classe
+    * @param[in]
+    * double T : maturité
+    * int nbTimeSteps : nombre de pas de temps de discrétisation
+    * int size : dimension du modèle
+    * double strike : prix d'exercice de l'option
+    */
     AsianOption(double T, int nbTimeSteps, int size, double strike);
 
     /**

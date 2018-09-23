@@ -16,8 +16,16 @@ public:
     PnlVect *sigma_; /// vecteur de volatilités
     PnlVect *spot_; /// valeurs initiales des sous-jacents
 
+    /**
+    * Constructeur de la classe
+    * @param[in]
+    * int size : nombre d'actifs du modèle
+    * double r : taux d'intérêt
+    * double rho : paramètre de corrélation
+    * PnlVect *sigma : vecteur de volatilités
+    * PnlVect *spot : valeurs initiales des sous-jacents
+    */
     BlackScholesModel(int size, double r, double rho, PnlVect *sigma, PnlVect *spot);
-
 
     /**
      * Génère une trajectoire du modèle et la stocke dans path
