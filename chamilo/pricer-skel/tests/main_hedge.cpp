@@ -1,6 +1,3 @@
-//
-// Created by lecalvmy on 9/21/18.
-//
 
 #include <gtest/gtest.h>
 #include "../src/BlackScholesModel.cpp"
@@ -9,8 +6,8 @@
 #include "../src/BasketOption.cpp"
 #include "../src/CallOption.cpp"
 #include "../src/PerformanceOption.cpp"
-#include "test_price_t_methode1.hpp"
-#include "test_price_t_methode2.hpp"
+#include "hedge_test.hpp"
+
 
 int main(int argc,char *argv[]) {
     ::testing::InitGoogleTest(&argc,argv);

@@ -55,14 +55,11 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *r
         for (int i = 1; i < nbTimeSteps+1; ++i) {
             pnl_mat_get_row(row_Gauss, suite_Gauss, i);
             produitScalaire = pnl_vect_scalar_prod(row_Gauss, row_Chol);
-            prix = prix_Prec * exp((r_-(pow(sigma,2))/2)*delta_t + produitScalaire * sigma * sqrt(delta_t));
+            prix = prix_Prec * exp((r_-(pow(sigma,2))/2) * delta_t + produitScalaire * sigma * sqrt(delta_t));
             pnl_mat_set(path, i, d, prix);
             prix_Prec = prix;
         }
     }
-
-    // Free
-
     pnl_vect_free(&row_Chol);
     pnl_vect_free(&row_Gauss);
     pnl_mat_free(&suite_Gauss);
@@ -108,18 +105,11 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
     PnlVect *row_Gauss = pnl_vect_create(size_);
     double produitScalaire;
 
-    PnlVect *price_i = pnl_vect_create(size_);
-
-    //mettre dans path les valeurs de past
-    for (int j = 0; j < nbSteps - a; ++j) {
-        pnl_mat_get_row(price_i, past, j);
-        pnl_mat_set_row(path, price_i, j);
-    }
-
+    pnl_mat_set_subblock(path, past, 0, 0);
 
     //Simuler les valeurs suivantes
     for (int d = 0; d < size_ ; ++d) {
-        double prix_Prec = pnl_mat_get(past, nbSteps - 1, d);
+        double prix_Prec = pnl_mat_get(past, past->m - 1, d);
         double prix = 0;
         double cours_prec = 1;
         double cours = 0;
@@ -136,7 +126,6 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
     }
 
     // Free
-    pnl_vect_free(&price_i);
     pnl_vect_free(&row_Chol);
     pnl_mat_free(&mat_Chol);
     pnl_vect_free(&row_Gauss);
@@ -147,15 +136,17 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
 void BlackScholesModel::shiftAsset(PnlMat *shift_path, const PnlMat *path, int d, double h, double t, double timestep){
 
     int nbTimeSteps = path->m;
-    // Retourne i tel que Ti < t < Ti+1
-    int nbSteps = 0;
-    while (nbSteps * timestep < t) {
-      nbSteps += 1;
+
+    //nbSteps correspondant
+    double step_1 = t/timestep;
+    double nbSteps = floor(t/timestep);
+    if (nbSteps != step_1) {
+      nbSteps += 1 ;
     }
 
     pnl_mat_clone(shift_path, path);
 
-    for (int i = nbSteps + 1; i < nbTimeSteps; i++) {
+    for (int i = nbSteps; i < nbTimeSteps; i++) {
       pnl_mat_set(shift_path, i , d, (1+h) * pnl_mat_get(path, i , d));
     }
 }

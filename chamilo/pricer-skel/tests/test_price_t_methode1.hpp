@@ -67,6 +67,8 @@ TEST(MonteCarlo, Call_price_t){
   MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, call2, rng, fdStep, n_samples);
 
   mCarlo2->price(prix2, ic2);
+  printf("prix t %f\n", prix );
+  printf("prix 0 %f\n", prix2 );
 
   ASSERT_TRUE(abs(prix-prix2)/prix2 <= 0.05); // ecart relatif inf a 5%
 
@@ -140,6 +142,8 @@ TEST(MonteCarlo, Asian_price_t){
   MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, asian2, rng, fdStep, n_samples);
   mCarlo2->price(prix2, ic2);
 
+  printf("prix t %f\n", prix );
+  printf("prix 0 %f\n", prix2 );
   ASSERT_TRUE(abs(prix-prix2)/prix2 <= 0.05); // ecart relatif inf a 5%
 
   pnl_mat_free(&past);
@@ -213,6 +217,8 @@ TEST(MonteCarlo, Basket_price_t){
   MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, basket_2, rng, fdStep, n_samples);
   mCarlo2->price(prix2, ic2);
 
+  printf("prix t %f\n", prix );
+  printf("prix 0 %f\n", prix2 );
   ASSERT_TRUE(abs(prix-prix2)/prix2 <= 0.05); // ecart relatif inf a 5%
 
   pnl_mat_free(&past);
@@ -285,6 +291,8 @@ TEST(MonteCarlo, Basket_1_price_t){
   MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, basket1_2, rng, fdStep, n_samples);
   mCarlo2->price(prix2, ic2);
 
+  printf("prix t %f\n", prix );
+  printf("prix 0 %f\n", prix2 );
   ASSERT_TRUE(abs(prix-prix2)/prix2 <= 0.05); // ecart relatif inf a 5%
 
   pnl_mat_free(&past);
@@ -356,6 +364,9 @@ TEST(MonteCarlo, Basket_2_price_t){
   Option *basket2_2  = new BasketOption(T - t, nbTimeSteps - step, size, strike);
   MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, basket2_2, rng, fdStep, n_samples);
   mCarlo2->price(prix2, ic2);
+
+  printf("prix t %f\n", prix );
+  printf("prix 0 %f\n", prix2 );
 
   ASSERT_TRUE(abs(prix-prix2)/prix2 <= 0.05); // ecart relatif inf a 5%
 
@@ -429,6 +440,8 @@ TEST(MonteCarlo, Basket_2d_price_t){
   MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, basket2d_2, rng, fdStep, n_samples);
   mCarlo2->price(prix2, ic2);
 
+  printf("prix t %f\n", prix );
+  printf("prix 0 %f\n", prix2 );
   ASSERT_TRUE(abs(prix-prix2)/prix2 <= 0.05); // ecart relatif inf a 5%
 
   pnl_mat_free(&past);
@@ -500,6 +513,8 @@ TEST(MonteCarlo, Perf_price_t){
   MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, perf2, rng, fdStep, n_samples);
   mCarlo2->price(prix2, ic2);
 
+  printf("prix t %f\n", prix );
+  printf("prix 0 %f\n", prix2 );
   ASSERT_TRUE(abs(prix-prix2)/prix2 <= 0.05); // ecart relatif inf a 5%
 
   pnl_mat_free(&past);
