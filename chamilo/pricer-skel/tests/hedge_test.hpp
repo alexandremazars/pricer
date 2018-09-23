@@ -85,8 +85,6 @@ TEST(MonteCarlo, pnlAsian){
 
   size_t n_samples = 100000;
 
-  PnlVect *weights = pnl_vect_create_from_scalar(1, 1.0);
-
   BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot, trend);
   Option *option = new AsianOption(T, nbTimeSteps, size, weights, strike);
 
