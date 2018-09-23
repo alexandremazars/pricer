@@ -6,10 +6,10 @@
 
 /**
 * Constructeur de la classe
-* @param[in] double T : maturité
-* @param[in] int nbTimeSteps : nombre de pas de temps de discrétisation
-* @param[in] int size : dimension du modèle
-* @param[in] double strike : prix d'exercice de l'option
+* @param[in] T : maturité
+* @param[in] nbTimeSteps : nombre de pas de temps de discrétisation
+* @param[in] size : dimension du modèle
+* @param[in] weights : poids des actifs
 */
 PerformanceOption::PerformanceOption(double T, int nbTimeSteps, int size, PnlVect* weights){
     T_ = T;

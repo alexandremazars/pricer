@@ -85,6 +85,8 @@ TEST(MonteCarlo, pnlAsian){
 
   size_t n_samples = 100000;
 
+  PnlVect *weights = pnl_vect_create_from_scalar(1, 1.0);
+
   BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot, trend);
   Option *option = new AsianOption(T, nbTimeSteps, size, weights, strike);
 
@@ -99,7 +101,7 @@ TEST(MonteCarlo, pnlAsian){
   delete mCarlo;
 }
 
-/*TEST(MonteCarlo, pnlBasket){
+TEST(MonteCarlo, pnlBasket){
   const char *infile = "../market-soutenance/market_basket.dat";
   PnlMat *Path = pnl_mat_create_from_file(infile);
 
@@ -122,9 +124,11 @@ TEST(MonteCarlo, pnlAsian){
   pnl_rng_sseed(rng, time(NULL));
 
   size_t n_samples = 100;
+  PnlVect *weights = pnl_vect_create_from_scalar(10, 0.1);
+
 
   BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot, trend);
-  Option *option = new BasketOption(T, nbTimeSteps, size, strike);
+  Option *option = new BasketOption(T, nbTimeSteps, size, weights, strike);
 
   MonteCarlo *mCarlo = new MonteCarlo(bsmodel, option, rng, fdStep, n_samples);
   double pnl = 0;
@@ -135,6 +139,6 @@ TEST(MonteCarlo, pnlAsian){
   delete option;
   delete bsmodel;
   delete mCarlo;
-}*/
+}
 
 #endif //MC_PRICER_TEST_PRICE_T_H

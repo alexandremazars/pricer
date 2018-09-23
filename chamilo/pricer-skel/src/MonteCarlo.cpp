@@ -8,11 +8,11 @@ using namespace std;
 
 /**
 * Constructeur de la classe
-* param[in] BlackScholesModel *mod : pointeur vers le modèle
-* param[in] Option *opt : pointeur sur l'option
-* param[in] PnlRng *rng : pointeur sur le générateur
-* param[in] double fdStep : pas de différence finie
-* param[in] size_t nbSamples : nombre de tirages Monte Carlo
+* param[in] mod : pointeur vers le modèle
+* param[in] opt : pointeur sur l'option
+* param[in] rng : pointeur sur le générateur
+* param[in] fdStep : pas de différence finie
+* param[in] nbSamples : nombre de tirages Monte Carlo
 */
 MonteCarlo::MonteCarlo(BlackScholesModel *mod, Option *opt, PnlRng *rng, double fdStep, int nbSamples){
     mod_ = mod;
@@ -84,6 +84,7 @@ void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic){
     pnl_mat_free(&path);
 }
 
+
 /**
  * Calcule le delta de l'option à la date t
  *
@@ -91,9 +92,7 @@ void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic){
  * jusqu'à l'instant t
  * @param[in] t date à laquelle le calcul est fait
  * @param[out] delta contient le vecteur de delta
- * de confiance sur le calcul du delta
- * @param[in] delta contient le vecteur de delta
- * de confiance sur le calcul du delta
+ * @param[in] conf_delta contient le vecteur d'intervalle de confiance sur le calcul du delta
  */
 void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *conf_delta){
 
@@ -148,10 +147,10 @@ void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *co
 /**
  * Calcule le prix et le delta des options à tout instant donné
  *
- * @param[out] PnlVect *listPrice contient le prix des options à differents instants
- * @param[in] PnlMat *matDelta contient le delta des options à differents instants
- * @param[in] PnlMat *marketPrice contient la disposition des trajectoires de marché
- * @param[in] int H : nombre de rebalancements
+ * @param[out] listPrice contient le prix des options à differents instants
+ * @param[in] matDelta contient le delta des options à differents instants
+ * @param[in] marketPrice contient la disposition des trajectoires de marché
+ * @param[in] H : nombre de rebalancements
  */
 void MonteCarlo::PriceDelta(PnlVect *listPrice, PnlMat *matDelta, PnlMat *marketPrice, int H){
         double delta_h = (opt_->T_)/H;
@@ -187,8 +186,8 @@ void MonteCarlo::PriceDelta(PnlVect *listPrice, PnlMat *matDelta, PnlMat *market
  * Construction du portefeuille de couverture
  * Calcul de l'évolution de la part investie au taux sans risque
  *
- * @param[out] PnlVect *listHedge contient la valeur du portefeuille de couverture à differents instants
- * @param[in] PnlMat *marketPrice contient la disposition des trajectoires de marché
+ * @param[out] listHedge contient la valeur du portefeuille de couverture à differents instants
+ * @param[in] marketPrice contient la disposition des trajectoires de marché
  */
 void MonteCarlo::listHedge(PnlVect *listHedge,PnlVect *lastDelta, double& lastPrice, PnlMat *marketPrice){
         double H = marketPrice->m - 1;
@@ -228,9 +227,9 @@ void MonteCarlo::listHedge(PnlVect *listHedge,PnlVect *lastDelta, double& lastPr
 /**
 * Profit and Loss
 * Calcul de l'erreur de couverture
-* @param[out] double& pnl : erreur de couverture
-* @param[in] PnlMat *marketPrice : disposition des trajectoires de marché
-* @param[in] int H : nombre de rebalancements
+* @param[out]  pnl : erreur de couverture
+* @param[in] marketPrice : disposition des trajectoires de marché
+* @param[in] H : nombre de rebalancements
 */
 void MonteCarlo::pnl(double& pnl, PnlMat *marketPrice, int H){
       double lastPrice = 0;
