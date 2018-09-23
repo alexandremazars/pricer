@@ -54,7 +54,8 @@ int main(int argc, char **argv)
     pnl_rng_init(rng, PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
 
-    
+    printf("option: %f, %i, %i\n", opt->T_, opt->nbTimeSteps_, opt->size_);
+    printf("strike:%f\n", strike);
     MonteCarlo *mCarlo = new MonteCarlo(bsmodel, opt, rng, fdStep, n_samples);
 
 
