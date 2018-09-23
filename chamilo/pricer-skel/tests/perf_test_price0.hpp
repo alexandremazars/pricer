@@ -33,7 +33,6 @@ TEST(MonteCarlo, Performance_price_0){
     BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot);
     Option *opt = new PerformanceOption(T, timestep, size);
     PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
-    printf("option: %f, %i, %i", opt->T_, opt->nbTimeSteps_, opt->size_);
     //
 
     pnl_rng_init(rng, PNL_RNG_MERSENNE);

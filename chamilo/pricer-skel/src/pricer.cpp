@@ -29,7 +29,7 @@ int main(int argc, char **argv)
     }
 
     if (argc == 3){
-        if (argv[1] != "-c"){
+        if (strcmp(argv[1], "-c") != 0){
             throw std::invalid_argument( "Option not implemented for function" );            
         } else {
             char *data_input = argv[3];
