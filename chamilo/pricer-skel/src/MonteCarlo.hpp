@@ -55,5 +55,6 @@ public:
      * @param[in] marketPrice contient la disposition des trajectoires de marché
      */
     void PriceDelta(PnlVect *listPrice, PnlMat *matDelta, PnlMat *marketPrice, int H);
-    void listHedge(PnlVect *listHedge,PnlMat *marketPrice);
+    void listHedge(PnlVect *listHedge, PnlVect* lastDelta, double& lastPrice, PnlMat *marketPrice);
+    void pnl(double& pnl, PnlMat *marketPrice, int H);
 };

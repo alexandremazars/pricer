@@ -23,6 +23,7 @@ TEST(MonteCarlo, Call_hedge){
   double rho = 0;
   PnlVect *sigma = pnl_vect_create_from_scalar(size,0.200000);
   PnlVect *spot = pnl_vect_create_from_scalar(size,100.000000);
+  PnlVect *trend = pnl_vect_create_from_zero(size);
 
   double T = 1.000000;
   int nbTimeSteps = 100;
@@ -35,17 +36,17 @@ TEST(MonteCarlo, Call_hedge){
 
   size_t n_samples = 5000;
 
-  BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot);
+  BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot, trend);
   Option *call = new AsianOption(T, nbTimeSteps, size, strike);
   PnlMat *path = pnl_mat_create(H+1, size);
-  bsmodel->asset(path, T, H,rng);
+  bsmodel->simul_market(path, T, rng);
 
   MonteCarlo *mCarlo = new MonteCarlo(bsmodel, call, rng, fdStep, n_samples);
-  PnlVect *hedge = pnl_vect_create(H+1);
-  mCarlo->listHedge(hedge, path);
+  double pnl = 0;
+  mCarlo->pnl(pnl, path, H);
+  printf("P&L: %f\n", pnl);
 
   pnl_mat_free(&path);
-  pnl_vect_free(&hedge);
 
   delete call;
   delete bsmodel;

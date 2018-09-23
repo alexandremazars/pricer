@@ -35,26 +35,27 @@ int main(int argc, char **argv)
     if (type != "performance"){
         P->extract("strike", strike);
     }
-    P->extract("timestep number", timestep);    
+    P->extract("timestep number", timestep);
     P->extract("sample number", n_samples);
+    PnlVect* trend = pnl_vect_create_from_zero(size);
 
     Option* opt;
-    
-    BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot);
+
+    BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot, trend);
     if (type == "asian"){
-        opt = new AsianOption(T, timestep, size, strike);        
+        opt = new AsianOption(T, timestep, size, strike);
     } else if ( type == "basket"){
-        opt = new BasketOption(T, timestep, size, strike);   
+        opt = new BasketOption(T, timestep, size, strike);
     } else if ( type == "performance"){
-        opt = new PerformanceOption(T, timestep, size);        
+        opt = new PerformanceOption(T, timestep, size);
     }
     PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
-    
+
     //
     pnl_rng_init(rng, PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
 
-    
+
     MonteCarlo *mCarlo = new MonteCarlo(bsmodel, opt, rng, fdStep, n_samples);
 
 

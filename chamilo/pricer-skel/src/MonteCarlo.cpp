@@ -127,12 +127,14 @@ void MonteCarlo::PriceDelta(PnlVect *listPrice, PnlMat *matDelta, PnlMat *market
         pnl_vect_free(&listDelta);
 }
 
-void MonteCarlo::listHedge(PnlVect *listHedge,PnlMat *marketPrice){
+void MonteCarlo::listHedge(PnlVect *listHedge,PnlVect *lastDelta, double& lastPrice, PnlMat *marketPrice){
         double H = marketPrice->m - 1;
         int size = marketPrice->n;
         PnlVect *price = pnl_vect_create(H+1);
         PnlMat *deltas = pnl_mat_create(H+1,size);
         PriceDelta(price, deltas, marketPrice, H);
+        pnl_mat_get_row(lastDelta, deltas, H);
+        lastPrice = pnl_vect_get(price, H);
         double price_h = pnl_vect_get(price, 0);
         PnlVect *deltaSize_prec = pnl_vect_create(size);
         PnlVect *deltaSize = pnl_vect_create(size);
@@ -152,16 +154,25 @@ void MonteCarlo::listHedge(PnlVect *listHedge,PnlMat *marketPrice){
           pnl_vect_clone(deltaSize_prec, deltaSize);
           pnl_vect_set(listHedge, i, hedgeValue);
         }
-        /*printf("Price\n");
-        pnl_vect_print(price);
-        printf("Delta\n");
-        pnl_mat_print(deltas);
-        printf("Hedge\n");
-        pnl_vect_print(listHedge);*/
 
         pnl_vect_free(&price);
         pnl_mat_free(&deltas);
         pnl_vect_free(&deltaSize_prec);
         pnl_vect_free(&deltaSize);
         pnl_vect_free(&valueSize);
+}
+
+void MonteCarlo::pnl(double& pnl, PnlMat *marketPrice, int H){
+      double lastPrice = 0;
+      PnlVect* lastDelta = pnl_vect_create(opt_->size_);
+      PnlVect* hedges = pnl_vect_create(H+1);
+      listHedge(hedges, lastDelta, lastPrice, marketPrice);
+      PnlVect* rowPrice = pnl_vect_create(opt_->size_);
+      pnl_mat_get_row(rowPrice, marketPrice, H);
+
+      pnl = pnl_vect_get(hedges, H) + pnl_vect_scalar_prod(lastDelta, rowPrice) - lastPrice;
+
+      pnl_vect_free(&lastDelta);
+      pnl_vect_free(&hedges);
+      pnl_vect_free(&rowPrice);
 }
