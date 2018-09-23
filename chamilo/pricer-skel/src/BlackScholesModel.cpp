@@ -105,7 +105,7 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
     PnlVect *row_Gauss = pnl_vect_create(size_);
     double produitScalaire;
 
-    pnl_mat_set_subblock(path, past, 0, 0);
+    //pnl_mat_set_subblock(path, past, 0, 0);
 
     //Simuler les valeurs suivantes
     for (int d = 0; d < size_ ; ++d) {

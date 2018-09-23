@@ -44,6 +44,7 @@ void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic){
     PnlMat *path;
     double esp_carre = 0;
     path = pnl_mat_create(opt_->nbTimeSteps_ + 1, mod_->size_);
+    pnl_mat_set_subblock(path, past, 0, 0);
     for (size_t i = 0; i < nbSamples_; ++i) {
         mod_->asset(path, t, opt_->T_, opt_->nbTimeSteps_, rng_, past);
         payoff = opt_->payoff(path);
