@@ -21,6 +21,8 @@ int main(int argc, char **argv)
     PnlVect *spot, *sigma, *divid, *payoff_coef;
     string type;
     int size, timestep, hedging_dates_number;
+    int optionc = 0;
+
     size_t n_samples;
     char *infile, *market_file;
     if (argc >= 5 || argc == 3){
@@ -31,15 +33,14 @@ int main(int argc, char **argv)
         if (strcmp(argv[1], "-c") != 0){
             throw std::invalid_argument( "Option not implemented for function" );
         } else {
+            optionc = 1;
             infile = argv[3];
             market_file = argv[2];
         }
-            printf("t'es là ou t'es pas là?\n");
 
     }
 
     Param *P = new Parser(infile);
-    printf("parser launched\n");
     P->extract("option type", type);
     P->extract("maturity", T);
     P->extract("option size", size);
@@ -105,14 +106,16 @@ int main(int argc, char **argv)
     float seconds2 = diff2 / CLOCKS_PER_SEC;
     printf("%f sec\n==============\n", seconds2);
 
-    PnlMat *market = pnl_mat_create_from_file(market_file);
-    double pnl = 0;
-    mCarlo->pnl(pnl, market, hedging_dates_number);
-    printf("P&L: %f\n", pnl);
-    t4 = clock();
-    float diff3 ((float)t4-(float)t1);
-    float seconds3 = diff3 / CLOCKS_PER_SEC;
-    printf("%f sec\n", seconds3);
+    if (optionc == 1){
+        PnlMat *market = pnl_mat_create_from_file(market_file);
+        double pnl = 0;
+        mCarlo->pnl(pnl, market, hedging_dates_number);
+        printf("P&L: %f\n", pnl);
+        t4 = clock();
+        float diff3 ((float)t4-(float)t1);
+        float seconds3 = diff3 / CLOCKS_PER_SEC;
+        printf("%f sec\n", seconds3);
+    }
 
     pnl_mat_free(&past);
     pnl_vect_free(&delta);
