@@ -12,7 +12,7 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-    double fdStep = 1;
+    double fdStep;
     double T, r, strike, correlation;
     PnlVect *spot, *sigma, *divid;
     string type;
