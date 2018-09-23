@@ -6,6 +6,9 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 
+/**
+* Programme de test pour le delta d'une option basket
+*/
 
 TEST(MonteCarlo, BasketDelta0){
     double fdStep = 0.1;

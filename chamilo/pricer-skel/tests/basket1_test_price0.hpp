@@ -5,6 +5,10 @@
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 
+/**
+* Programme de test pour le prix en 0 d'une option basket
+*/
+
 TEST(MonteCarlo, Basket1_price_0){
     double fdStep = 1;
     double T, r, strike, correlation;

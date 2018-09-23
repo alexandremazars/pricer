@@ -11,6 +11,11 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 
+/**
+* Programme de test pour le prix en t des différentes options
+* Méthode 2
+*/
+
 TEST(MonteCarlo, Call_price_t_2){
 
     const char *infile = "../../market-data/simul_call.dat";

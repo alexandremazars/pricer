@@ -6,6 +6,10 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 
+/**
+* Programme de test pour le delta en 0 d'une option asiatique
+* Comparaison avec les résultats exacts donnés dans les fichiers .dat
+*/
 
 TEST(MonteCarlo, AsianDelta0){
     double fdStep = 0.1;

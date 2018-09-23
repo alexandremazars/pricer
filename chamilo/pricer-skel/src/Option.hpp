@@ -22,7 +22,7 @@ public:
      * @return phi(trajectoire)
      */
     virtual double payoff(const PnlMat *path) = 0;
+
+    /* destructeur par défaut pour l'option */
     virtual ~Option() = default;
 };
-
-

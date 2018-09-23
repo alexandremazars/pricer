@@ -4,13 +4,21 @@
 
 #include "Option.hpp"
 
+/// \brief Option Call hérite de la classe abstraite option
 class CallOption : public Option
 {
 public:
 
-    double strike_;
+    double strike_; /// Prix d'exercice de l'option call
 
     CallOption(double T, int nbTimeSteps, int size, PnlVect* weights, double strike);
+    /**
+    * Constructeur de la classe
+    * @param[in] double T : maturité
+    * @param[in] int nbTimeSteps : nombre de pas de temps de discrétisation
+    * @param[in] int size : dimension du modèle
+    * @param[in] double strike : prix d'exercice de l'option
+    */
 
     /**
      * Calcule la valeur du payoff sur la trajectoire

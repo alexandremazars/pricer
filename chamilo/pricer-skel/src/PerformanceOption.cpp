@@ -4,14 +4,33 @@
 
 #include "PerformanceOption.hpp"
 
+<<<<<<< HEAD
 
 PerformanceOption::PerformanceOption(double T, int nbTimeSteps, int size, PnlVect* weights){
+=======
+/**
+* Constructeur de la classe
+* @param[in] double T : maturité
+* @param[in] int nbTimeSteps : nombre de pas de temps de discrétisation
+* @param[in] int size : dimension du modèle
+* @param[in] double strike : prix d'exercice de l'option
+*/
+PerformanceOption::PerformanceOption(double T, int nbTimeSteps, int size){
+>>>>>>> 90091012cb6b248b628b00ca54f47f23703d1b5d
     T_ = T;
     nbTimeSteps_ = nbTimeSteps;
     size_ = size;
     weights_ = weights;
 }
 
+/**
+ * Calcule la valeur du payoff sur la trajectoire
+ *
+ * @param[in] path est une matrice de taille (N+1) x d
+ * contenant une trajectoire du modèle telle que créée
+ * par la fonction asset.
+ * @return phi(trajectoire)
+ */
 double PerformanceOption::payoff(const PnlMat *path) {
     double sum_N = 0;
     for (int i = 1; i < path->m ; ++i) {

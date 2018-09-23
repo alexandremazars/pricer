@@ -5,6 +5,10 @@
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 
+/**
+* Programme de test pour le prix en 0 d'une option basket
+*/
+
 TEST(MonteCarlo, Basket2_price_0){
     double fdStep = 1;
     double T, r, strike, correlation;
@@ -44,7 +48,7 @@ TEST(MonteCarlo, Basket2_price_0){
     double prix = 0.0;
     double ic = 0.0;
     mCarlo->price(prix , ic);
-    
+
 
     ASSERT_LE(9.238710 - ic, prix) << "Error, price at t=0 not in confidence interval, too low";
     ASSERT_GE(9.238710 + ic, prix) << "Error, price at t=0 not in confidence interval, too high";
@@ -64,4 +68,3 @@ TEST(MonteCarlo, Basket2_price_0){
 
 
 #endif // CHAMILO_TEST_BASKET2_PRICE0
-
