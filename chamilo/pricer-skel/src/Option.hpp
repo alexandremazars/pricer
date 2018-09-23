@@ -9,10 +9,14 @@
 class Option
 {
 public:
-    double T_; /// maturité
-    int nbTimeSteps_; /// nombre de pas de temps de discrétisation
-    int size_; /// dimension du modèle, redondant avec BlackScholesModel::size_
-    PnlVect* weights_; /// poids des sous-jacents
+    /*! maturité de l'option */
+    double T_;
+    /*!  nombre de pas de temps de discrétisation */
+    int nbTimeSteps_;
+    /*! dimension du modèle, redondant avec BlackScholesModel::size_ */
+    int size_;
+    /*! poids des sous-jacents */
+    PnlVect* weights_;
     /**
      * Calcule la valeur du payoff sur la trajectoire
      *

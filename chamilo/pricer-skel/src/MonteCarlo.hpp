@@ -9,19 +9,24 @@
 class MonteCarlo
 {
 public:
-    BlackScholesModel *mod_; /*! pointeur vers le modèle */
-    Option *opt_; /*! pointeur sur l'option */
-    PnlRng *rng_; /*! pointeur sur le générateur */
-    double fdStep_; /*! pas de différence finie */
-    size_t nbSamples_; /*! nombre de tirages Monte Carlo */
+    /*! pointeur vers le modèle de Black Scholes */
+    BlackScholesModel *mod_;
+    /*! pointeur sur l'option */
+    Option *opt_;
+    /*! pointeur sur le générateur de nombres aléatoires */
+    PnlRng *rng_;
+    /*! pas de h */
+    double fdStep_;
+    /*! nombre de tirages Monte Carlo */
+    size_t nbSamples_;
 
     /**
     * Constructeur de la classe
-    * param[in] BlackScholesModel *mod : pointeur vers le modèle
-    * param[in] Option *opt : pointeur sur l'option
-    * param[in] PnlRng *rng : pointeur sur le générateur
-    * param[in] double fdStep : pas de différence finie
-    * param[in] size_t nbSamples : nombre de tirages Monte Carlo
+    * param[in] mod : pointeur vers le modèle
+    * param[in] opt : pointeur sur l'option
+    * param[in] rng : pointeur sur le générateur
+    * param[in]  fdStep : pas de différence finie
+    * param[in]  nbSamples : nombre de tirages Monte Carlo
     */
     MonteCarlo(BlackScholesModel *mod, Option *opt, PnlRng *rng, double fdStep, int nbSamples);
 
@@ -52,19 +57,17 @@ public:
      * jusqu'à l'instant t
      * @param[in] t date à laquelle le calcul est fait
      * @param[out] delta contient le vecteur de delta
-     * de confiance sur le calcul du delta
-     * @param[in] delta contient le vecteur de delta
-     * de confiance sur le calcul du delta
+     * @param[in] conf_delta contient le vecteur d'intervalle de confiance sur le calcul du delta
      */
     void delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *conf_delta);
 
     /**
      * Calcule le prix et le delta des options à tout instant donné
      *
-     * @param[out] PnlVect *listPrice contient le prix des options à differents instants
-     * @param[in] PnlMat *matDelta contient le delta des options à differents instants
-     * @param[in] PnlMat *marketPrice contient la disposition des trajectoires de marché
-     * @param[in] int H : nombre de rebalancements
+     * @param[out] listPrice contient le prix des options à differents instants
+     * @param[in] matDelta contient le delta des options à differents instants
+     * @param[in] marketPrice contient la disposition des trajectoires de marché
+     * @param[in] H : nombre de rebalancements
      */
     void PriceDelta(PnlVect *listPrice, PnlMat *matDelta, PnlMat *marketPrice, int H);
 
@@ -72,17 +75,19 @@ public:
      * Construction du portefeuille de couverture
      * Calcul de l'évolution de la part investie au taux sans risque
      *
-     * @param[out] PnlVect *listHedge contient la valeur du portefeuille de couverture à differents instants
-     * @param[in] PnlMat *marketPrice contient la disposition des trajectoires de marché
+     * @param[out] listHedge contient la valeur du portefeuille de couverture à differents instants
+     * @param[in] marketPrice contient la disposition des trajectoires de marché
+     * @param[in] lastDelta delta dernier instant (a maturite)
+     * @param[in] lastPrice delta dernier instant (a maturite)
      */
     void listHedge(PnlVect *listHedge, PnlVect* lastDelta, double& lastPrice, PnlMat *marketPrice);
 
     /**
     * Profit and Loss
     * Calcul de l'erreur de couverture
-    * @param[out] double& pnl : erreur de couverture
-    * @param[in] PnlMat *marketPrice : disposition des trajectoires de marché
-    * @param[in] int H : nombre de rebalancements
+    * @param[out]  pnl : erreur de couverture
+    * @param[in] marketPrice : disposition des trajectoires de marché
+    * @param[in] H : nombre de rebalancements
     */
     void pnl(double& pnl, PnlMat *marketPrice, int H);
 

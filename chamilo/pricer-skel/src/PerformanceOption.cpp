@@ -4,19 +4,14 @@
 
 #include "PerformanceOption.hpp"
 
-<<<<<<< HEAD
-
-PerformanceOption::PerformanceOption(double T, int nbTimeSteps, int size, PnlVect* weights){
-=======
 /**
 * Constructeur de la classe
-* @param[in] double T : maturité
-* @param[in] int nbTimeSteps : nombre de pas de temps de discrétisation
-* @param[in] int size : dimension du modèle
-* @param[in] double strike : prix d'exercice de l'option
+* @param[in] T : maturité
+* @param[in] nbTimeSteps : nombre de pas de temps de discrétisation
+* @param[in] size : dimension du modèle
+* @param[in] weights : poids des actifs
 */
-PerformanceOption::PerformanceOption(double T, int nbTimeSteps, int size){
->>>>>>> 90091012cb6b248b628b00ca54f47f23703d1b5d
+PerformanceOption::PerformanceOption(double T, int nbTimeSteps, int size, PnlVect* weights){
     T_ = T;
     nbTimeSteps_ = nbTimeSteps;
     size_ = size;

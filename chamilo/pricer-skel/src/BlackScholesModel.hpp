@@ -10,22 +10,27 @@
 class BlackScholesModel
 {
 public:
-    int size_; /// nombre d'actifs du modèle
-    double r_; /// taux d'intérêt
-    double rho_; /// paramètre de corrélation
-    PnlVect *sigma_; /// vecteur de volatilités
-    PnlVect *spot_; /// valeurs initiales des sous-jacents
-    PnlVect *trend_; ///vecteur des tendances
+    /*! nombre d'actifs du modèle */
+    int size_;
+    /*! taux d'intérêt */
+    double r_;
+    /*!  paramètre de corrélation */
+    double rho_;
+    /*! vecteur de volatilités */
+    PnlVect *sigma_;
+    /*!  valeurs initiales des sous-jacents */
+    PnlVect *spot_;
+    /*! vecteur des tendances */
+    PnlVect *trend_;
 
     /**
     * Constructeur de la classe
-    * @param[in]
-    * int size : nombre d'actifs du modèle
-    * double r : taux d'intérêt
-    * double rho : paramètre de corrélation
-    * PnlVect *sigma : vecteur de volatilités
-    * PnlVect *spot : valeurs initiales des sous-jacents
-    * PnlVect *trend : tendance du modèle
+    * @param[in] size : nombre d'actifs du modèle
+    * @param[in]  r : taux d'intérêt
+    * @param[in]  rho : paramètre de corrélation
+    * @param[in]  sigma : vecteur de volatilités
+    * @param[in]  spot : valeurs initiales des sous-jacents
+    * @param[in]  trend : tendance du modèle
     */
     BlackScholesModel(int size, double r, double rho, PnlVect *sigma, PnlVect *spot, PnlVect *trend);
 
@@ -35,6 +40,7 @@ public:
      * @param[out] path contient une trajectoire du modèle.
      * C'est une matrice de taille (nbTimeSteps+1) x d
      * @param[in] T  maturité
+     * @param[in] rng generateur de nombres aleatoires
      * @param[in] nbTimeSteps nombre de dates de constatation
      */
     void asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng);
@@ -49,6 +55,7 @@ public:
      * t n'est pas forcément une date de discrétisation
      * @param[in] nbTimeSteps nombre de pas de constatation
      * @param[in] T date jusqu'à laquelle on simule la trajectoire
+     * @param[in] rng generateur de nombres aleatoires
      * @param[in] past trajectoire réalisée jusqu'a la date t
      */
     void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past);
@@ -70,9 +77,9 @@ public:
 
     /**
     * Simulation du marché (simulation du modèle sous la probabilité historique)
-    * @param[out] PnlMat *simulatedMarket : contient les valeurs simulées du marché
-    * @param[in] double T : maturité
-    * @param[in] PnlRng *rng : générateur de nombres aléatoires
+    * @param[out] simulatedMarket : contient les valeurs simulées du marché
+    * @param[in]  T : maturité
+    * @param[in] rng : générateur de nombres aléatoires
     */
     void simul_market(PnlMat *simulatedMarket, double T, PnlRng *rng);
 };

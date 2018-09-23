@@ -9,16 +9,18 @@ class BasketOption : public Option
 {
 public:
 
-    double strike_; /// Prix d'exercice de l'option basket
+    /*! Prix d'exercice de l'option basket */
+    double strike_;
 
-    BasketOption(double T, int nbTimeSteps, int size, PnlVect* weights, double strike);
     /**
     * Constructeur de la classe
-    * @param[in] double T : maturité
-    * @param[in] int nbTimeSteps : nombre de pas de temps de discrétisation
-    * @param[in] int size : dimension du modèle
-    * @param[in] double strike : prix d'exercice de l'option
+    * @param[in]  T : maturité
+    * @param[in]  nbTimeSteps : nombre de pas de temps de discrétisation
+    * @param[in]  size : dimension du modèle
+    * @param[in] weights : poids des actifs
+    * @param[in]  strike : prix d'exercice de l'option
     */
+    BasketOption(double T, int nbTimeSteps, int size, PnlVect* weights, double strike);
 
     /**
      * Calcule la valeur du payoff sur la trajectoire
