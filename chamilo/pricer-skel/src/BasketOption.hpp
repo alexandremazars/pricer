@@ -13,11 +13,10 @@ public:
 
     /**
     * Constructeur de la classe
-    * @param[in]
-    * double T : maturité
-    * int nbTimeSteps : nombre de pas de temps de discrétisation
-    * int size : dimension du modèle
-    * double strike : prix d'exercice de l'option
+    * @param[in] double T : maturité
+    * @param[in] int nbTimeSteps : nombre de pas de temps de discrétisation
+    * @param[in] int size : dimension du modèle
+    * @param[in] double strike : prix d'exercice de l'option
     */
     BasketOption(double T, int nbTimeSteps, int size, double strike);
 

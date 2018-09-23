@@ -6,11 +6,10 @@
 
 /**
 * Constructeur de la classe
-* @param[in]
-* double T : maturité
-* int nbTimeSteps : nombre de pas de temps de discrétisation
-* int size : dimension du modèle
-* double strike : prix d'exercice de l'option
+* @param[in] double T : maturité
+* @param[in] int nbTimeSteps : nombre de pas de temps de discrétisation
+* @param[in] int size : dimension du modèle
+* @param[in] double strike : prix d'exercice de l'option
 */
 CallOption::CallOption(double T, int nbTimeSteps, int size, double strike){
     T_ = T;
@@ -28,5 +27,5 @@ CallOption::CallOption(double T, int nbTimeSteps, int size, double strike){
  * @return phi(trajectoire)
  */
 double CallOption::payoff(const PnlMat *path) {
-    return fmax(pnl_mat_get(path, nbTimeSteps_, 0)-strike_, 0);
+    return fmax(pnl_mat_get(path, path->m - 1, 0)-strike_, 0);
 }

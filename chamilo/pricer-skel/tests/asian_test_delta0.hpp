@@ -6,6 +6,10 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 
+/**
+* Programme de test pour le delta en 0 d'une option asiatique
+* Comparaison avec les résultats exacts donnés dans les fichiers .dat
+*/
 
 TEST(MonteCarlo, AsianDelta0){
     double fdStep = 0.1;
@@ -32,8 +36,9 @@ TEST(MonteCarlo, AsianDelta0){
     P->extract("strike", strike);
     P->extract("timestep number", timestep);
     P->extract("sample number", n_samples);
+    PnlVect *trend = pnl_vect_create_from_zero(size);
 
-    BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot);
+    BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot, trend);
     Option *aOption = new AsianOption(T, timestep, size, strike);
     PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
 

@@ -6,6 +6,9 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 
+/**
+* Programme de test pour le delta d'une option basket
+*/
 
 TEST(MonteCarlo, Basket1Delta0){
     double fdStep = 0.1;
@@ -32,8 +35,9 @@ TEST(MonteCarlo, Basket1Delta0){
     P->extract("strike", strike);
     P->extract("timestep number", timestep);
     P->extract("sample number", n_samples);
+    PnlVect *trend = pnl_vect_create_from_zero(size);
 
-    BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot);
+    BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot, trend);
     Option *bOption = new BasketOption(T, timestep, size, strike);
     PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
     //
@@ -48,7 +52,7 @@ TEST(MonteCarlo, Basket1Delta0){
 
     PnlVect *delta = pnl_vect_create(size);
     PnlVect *conf_delta = pnl_vect_create(size);
-    
+
     mCarlo->delta(past, 0, delta, conf_delta);
     int good_sum = 0;
     double ic = 0;

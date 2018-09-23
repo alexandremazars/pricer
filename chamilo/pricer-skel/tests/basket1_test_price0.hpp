@@ -5,6 +5,10 @@
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 
+/**
+* Programme de test pour le prix en 0 d'une option basket
+*/
+
 TEST(MonteCarlo, Basket1_price_0){
     double fdStep = 1;
     double T, r, strike, correlation;
@@ -30,8 +34,9 @@ TEST(MonteCarlo, Basket1_price_0){
     P->extract("strike", strike);
     P->extract("timestep number", timestep);
     P->extract("sample number", n_samples);
+    PnlVect *trend = pnl_vect_create_from_zero(size);
 
-    BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot);
+    BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot, trend);
     Option *bOption = new BasketOption(T, timestep, size, strike);
     PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
     //

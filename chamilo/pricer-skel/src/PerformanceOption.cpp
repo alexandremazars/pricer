@@ -6,11 +6,10 @@
 
 /**
 * Constructeur de la classe
-* @param[in]
-* double T : maturité
-* int nbTimeSteps : nombre de pas de temps de discrétisation
-* int size : dimension du modèle
-* double strike : prix d'exercice de l'option
+* @param[in] double T : maturité
+* @param[in] int nbTimeSteps : nombre de pas de temps de discrétisation
+* @param[in] int size : dimension du modèle
+* @param[in] double strike : prix d'exercice de l'option
 */
 PerformanceOption::PerformanceOption(double T, int nbTimeSteps, int size){
     T_ = T;
@@ -28,7 +27,7 @@ PerformanceOption::PerformanceOption(double T, int nbTimeSteps, int size){
  */
 double PerformanceOption::payoff(const PnlMat *path) {
     double sum_N = 0;
-    for (int i = 1; i < nbTimeSteps_ + 1 ; ++i) {
+    for (int i = 1; i < path->m ; ++i) {
         double sum_num = 0;
         double sum_denom = 0;
         for (int d = 0; d < size_; ++d) {

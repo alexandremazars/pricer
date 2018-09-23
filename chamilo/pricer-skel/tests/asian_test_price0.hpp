@@ -5,6 +5,10 @@
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 
+/**
+* Programme de test pour le prix en 0 d'une option asiatique
+*/
+
 TEST(MonteCarlo, Asian_price_0){
     double fdStep = 1;
     double T, r, strike, correlation;
@@ -31,7 +35,9 @@ TEST(MonteCarlo, Asian_price_0){
     P->extract("timestep number", timestep);
     P->extract("sample number", n_samples);
 
-    BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot);
+    PnlVect *trend = pnl_vect_create_from_zero(size);
+
+    BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot, trend);
     Option *aOption = new AsianOption(T, timestep, size, strike);
     PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
     //

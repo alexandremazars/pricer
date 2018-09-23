@@ -5,6 +5,10 @@
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 
+/**
+* Programme de test pour le prix en 0 d'une option performance
+*/
+
 TEST(MonteCarlo, Performance_price_0){
     double fdStep = 1;
     double T, r, strike, correlation;
@@ -29,11 +33,13 @@ TEST(MonteCarlo, Performance_price_0){
     }
     P->extract("timestep number", timestep);
     P->extract("sample number", n_samples);
+    PnlVect *trend = pnl_vect_create_from_zero(size);
 
-    BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot);
+    BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot, trend);
     Option *pOption = new PerformanceOption(T, timestep, size);
     PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
     //
+
     pnl_rng_init(rng, PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
     MonteCarlo *mCarlo = new MonteCarlo(bsmodel, pOption, rng, fdStep, n_samples);

@@ -6,11 +6,10 @@
 
 /**
 * Constructeur de la classe
-* @param[in]
-* double T : maturité
-* int nbTimeSteps : nombre de pas de temps de discrétisation
-* int size : dimension du modèle
-* double strike : prix d'exercice de l'option
+* @param[in] double T : maturité
+* @param[in] int nbTimeSteps : nombre de pas de temps de discrétisation
+* @param[in] int size : dimension du modèle
+* @param[in] double strike : prix d'exercice de l'option
 */
 AsianOption::AsianOption(double T, int nbTimeSteps, int size, double strike){
     T_ = T;
@@ -32,10 +31,10 @@ double AsianOption::payoff(const PnlMat *path) {
     double sum_N;
     for (int d = 0; d < size_; ++d) {
         sum_N = 0;
-        for (int i = 0; i < nbTimeSteps_ + 1; ++i) {
+        for (int i = 0; i < path->m ; ++i) {
             sum_N += pnl_mat_get(path, i, d);
         }
-        sum += sum_N / (size_ * (nbTimeSteps_+1) );
+        sum += sum_N / (size_ * (path->m) );
     }
     return fmax(sum-strike_, 0);
 }
