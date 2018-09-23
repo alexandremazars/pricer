@@ -35,6 +35,7 @@ TEST(MonteCarlo, Performance_price_0){
     Option *pOption = new PerformanceOption(T, timestep, size);
     PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
     //
+
     pnl_rng_init(rng, PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
     MonteCarlo *mCarlo = new MonteCarlo(bsmodel, pOption, rng, fdStep, n_samples);

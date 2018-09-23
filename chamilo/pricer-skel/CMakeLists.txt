@@ -58,6 +58,7 @@ add_executable(pricer src/pricer.cpp src/MonteCarlo.cpp src/MonteCarlo.hpp src/B
         src/CallOption.cpp src/CallOption.hpp)
 target_link_libraries(pricer jl_parser ${LIBS})
 
+
 # Print compiler flags
 get_directory_property(DirDefs COMPILE_DEFINITIONS)
 message(STATUS "COMPILE_DEFINITIONS = ${DirDefs}")
