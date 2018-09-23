@@ -10,7 +10,7 @@ public:
 
     double strike_;
 
-    BasketOption(double T, int nbTimeSteps, int size, double strike);
+    BasketOption(double T, int nbTimeSteps, int size, PnlVect* weights, double strike);
 
     /**
      * Calcule la valeur du payoff sur la trajectoire

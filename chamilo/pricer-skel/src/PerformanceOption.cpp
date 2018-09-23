@@ -5,10 +5,11 @@
 #include "PerformanceOption.hpp"
 
 
-PerformanceOption::PerformanceOption(double T, int nbTimeSteps, int size){
+PerformanceOption::PerformanceOption(double T, int nbTimeSteps, int size, PnlVect* weights){
     T_ = T;
     nbTimeSteps_ = nbTimeSteps;
     size_ = size;
+    weights_ = weights;
 }
 
 double PerformanceOption::payoff(const PnlMat *path) {

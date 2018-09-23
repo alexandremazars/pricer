@@ -36,8 +36,10 @@ TEST(MonteCarlo, Call_hedge){
 
   size_t n_samples = 5000;
 
+  PnlVect *weights = pnl_vect_create_from_scalar(1, 1.0);      
+
   BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot, trend);
-  Option *call = new AsianOption(T, nbTimeSteps, size, strike);
+  Option *call = new AsianOption(T, nbTimeSteps, size, weights, strike);
   PnlMat *path = pnl_mat_create(H+1, size);
   bsmodel->simul_market(path, T, rng);
 

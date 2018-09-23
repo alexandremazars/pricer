@@ -18,7 +18,7 @@ int main(int argc, char **argv)
     t1=clock();
     double fdStep = 1;
     double T, r, strike, correlation;
-    PnlVect *spot, *sigma, *divid;
+    PnlVect *spot, *sigma, *divid, *payoff_coef;
     string type;
     int size, timestep, hedging_dates_number;
     size_t n_samples;
@@ -57,18 +57,18 @@ int main(int argc, char **argv)
     P->extract("timestep number", timestep);
     P->extract("sample number", n_samples);
     P->extract("hedging dates number", hedging_dates_number);
-
+    P->extract("payoff coefficients", payoff_coef, size);
     PnlVect* trend = pnl_vect_create_from_zero(size);
 
     Option* opt;
 
     BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot, trend);
     if (type == "asian"){
-        opt = new AsianOption(T, timestep, size, strike);
+        opt = new AsianOption(T, timestep, size, payoff_coef, strike);
     } else if ( type == "basket"){
-        opt = new BasketOption(T, timestep, size, strike);
+        opt = new BasketOption(T, timestep, size, payoff_coef, strike);
     } else if ( type == "performance"){
-        opt = new PerformanceOption(T, timestep, size);
+        opt = new PerformanceOption(T, timestep, size, payoff_coef);
     }
 
 

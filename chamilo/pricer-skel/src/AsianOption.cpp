@@ -4,10 +4,11 @@
 
 #include "AsianOption.hpp"
 
-AsianOption::AsianOption(double T, int nbTimeSteps, int size, double strike){
+AsianOption::AsianOption(double T, int nbTimeSteps, int size, PnlVect* weights, double strike){
     T_ = T;
     nbTimeSteps_ = nbTimeSteps;
     size_ = size;
+    weights_ = weights;
     strike_ = strike;
 }
 

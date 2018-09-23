@@ -4,10 +4,11 @@
 
 #include "CallOption.hpp"
 
-CallOption::CallOption(double T, int nbTimeSteps, int size, double strike){
+CallOption::CallOption(double T, int nbTimeSteps, int size, PnlVect* weights, double strike){
     T_ = T;
     nbTimeSteps_ = nbTimeSteps;
     size_ = size;
+    weights_ = weights;
     strike_ = strike;
 }
 

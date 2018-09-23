@@ -8,7 +8,7 @@
 TEST(MonteCarlo, Asian_price_0){
     double fdStep = 1;
     double T, r, strike, correlation;
-    PnlVect *spot, *sigma, *divid;
+    PnlVect *spot, *sigma, *divid, *payoff_coef;
     string type;
     int size, timestep;
     size_t n_samples;
@@ -30,11 +30,11 @@ TEST(MonteCarlo, Asian_price_0){
     P->extract("strike", strike);
     P->extract("timestep number", timestep);
     P->extract("sample number", n_samples);
-
+    P->extract("payoff coefficients", payoff_coef, size);    
     PnlVect *trend = pnl_vect_create_from_zero(size);
 
     BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot, trend);
-    Option *aOption = new AsianOption(T, timestep, size, strike);
+    Option *aOption = new AsianOption(T, timestep, size, payoff_coef, strike);
     PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
     //
     pnl_rng_init(rng, PNL_RNG_MERSENNE);
