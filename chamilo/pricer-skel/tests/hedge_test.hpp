@@ -40,8 +40,12 @@ TEST(MonteCarlo, pnlCall){
 
   size_t n_samples = 100000;
 
+  PnlVect *weights = pnl_vect_create_from_scalar(1, 1.0);
+
   BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot, trend);
-  Option *call = new CallOption(T, nbTimeSteps, size, strike);
+  Option *call = new AsianOption(T, nbTimeSteps, size, weights, strike);
+  PnlMat *path = pnl_mat_create(H+1, size);
+  bsmodel->simul_market(path, T, rng);
 
   MonteCarlo *mCarlo = new MonteCarlo(bsmodel, call, rng, fdStep, n_samples);
   double pnl = 0;
@@ -68,6 +72,8 @@ TEST(MonteCarlo, pnlAsian){
   PnlVect *spot = pnl_vect_create_from_scalar(size,100.000000);
   PnlVect *trend = pnl_vect_create_from_scalar(size, 0.1);
 
+  PnlVect *weights = pnl_vect_create_from_scalar(1, 1.0);
+
   double T = 2;
   int nbTimeSteps = 26;
   int H = 104;
@@ -80,7 +86,7 @@ TEST(MonteCarlo, pnlAsian){
   size_t n_samples = 100000;
 
   BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot, trend);
-  Option *option = new AsianOption(T, nbTimeSteps, size, strike);
+  Option *option = new AsianOption(T, nbTimeSteps, size, weights, strike);
 
   MonteCarlo *mCarlo = new MonteCarlo(bsmodel, option, rng, fdStep, n_samples);
   double pnl = 0;

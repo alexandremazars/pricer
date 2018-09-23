@@ -51,7 +51,7 @@ public:
      * @param[in] T date jusqu'à laquelle on simule la trajectoire
      * @param[in] past trajectoire réalisée jusqu'a la date t
      */
-    void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past);
+    void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past, double nbSteps, int a);
 
     /**
      * Shift d'une trajectoire du sous-jacent

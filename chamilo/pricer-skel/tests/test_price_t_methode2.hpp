@@ -38,8 +38,10 @@ TEST(MonteCarlo, Call_price_t_2){
 
     size_t n_samples = 50000;
 
+  PnlVect *weights = pnl_vect_create_from_scalar(1, 1.0);        
+
     BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot, trend);
-    Option *call = new CallOption(T, nbTimeSteps, size, strike);
+    Option *call = new CallOption(T, nbTimeSteps, size, weights, strike);
 
     pnl_rng_init(rng, PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
@@ -63,7 +65,7 @@ TEST(MonteCarlo, Call_price_t_2){
     double ic2 = 0;
 
     BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2, trend);
-    Option *call2  = new CallOption(T - t, nbTimeSteps - step, size, strike);
+    Option *call2  = new CallOption(T - t, nbTimeSteps - step, size, weights, strike);
     MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, call2, rng, fdStep, n_samples);
 
     mCarlo2->price(prix2, ic2);
@@ -104,9 +106,11 @@ TEST(MonteCarlo, Asian_price_t_2){
     PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
 
     size_t n_samples = 50000;
+    
+    PnlVect *weights = pnl_vect_create_from_scalar(2, 0.5);    
 
     BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot, trend);
-    Option *asian = new AsianOption(T, nbTimeSteps, size, strike);
+    Option *asian = new AsianOption(T, nbTimeSteps, size, weights, strike);
 
     pnl_rng_init(rng, PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
@@ -130,7 +134,7 @@ TEST(MonteCarlo, Asian_price_t_2){
     double ic2 = 0;
 
     BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2, trend);
-    Option *asian2  = new AsianOption(T - t, nbTimeSteps - step, size, strike);
+    Option *asian2  = new AsianOption(T - t, nbTimeSteps - step, size, weights, strike);
     MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, asian2, rng, fdStep, n_samples);
     mCarlo2->price(prix2, ic2);
 
@@ -173,9 +177,12 @@ TEST(MonteCarlo, Basket_price_t_2){
     PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
 
     size_t n_samples = 50000;
+    
+    PnlVect *weights = pnl_vect_create_from_scalar(5, 0.2);    
+    
 
     BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot, trend);
-    Option *basket = new BasketOption(T, nbTimeSteps, size, strike);
+    Option *basket = new BasketOption(T, nbTimeSteps, size, weights, strike);
 
     pnl_rng_init(rng, PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
@@ -199,7 +206,7 @@ TEST(MonteCarlo, Basket_price_t_2){
     double ic2 = 0;
 
     BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2, trend);
-    Option *basket_2  = new BasketOption(T - t, nbTimeSteps - step, size, strike);
+    Option *basket_2  = new BasketOption(T - t, nbTimeSteps - step, size, weights, strike);
     MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, basket_2, rng, fdStep, n_samples);
     mCarlo2->price(prix2, ic2);
 
@@ -241,8 +248,10 @@ TEST(MonteCarlo, Basket_1_price_t_2){
 
     size_t n_samples = 5000;
 
+    PnlVect *weights = pnl_vect_create_from_scalar(40, 0.025);    
+
     BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot, trend);
-    Option *basket1 = new BasketOption(T, nbTimeSteps, size, strike);
+    Option *basket1 = new BasketOption(T, nbTimeSteps, size, weights, strike);
 
     pnl_rng_init(rng, PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
@@ -266,7 +275,7 @@ TEST(MonteCarlo, Basket_1_price_t_2){
     double ic2 = 0;
 
     BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2, trend);
-    Option *basket1_2  = new BasketOption(T - t, nbTimeSteps - step, size, strike);
+    Option *basket1_2  = new BasketOption(T - t, nbTimeSteps - step, size, weights, strike);
     MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, basket1_2, rng, fdStep, n_samples);
     mCarlo2->price(prix2, ic2);
 
@@ -308,8 +317,10 @@ TEST(MonteCarlo, Basket_2_price_t_2){
 
     size_t n_samples = 5000;
 
+    PnlVect *weights = pnl_vect_create_from_scalar(40, 0.025);    
+
     BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot, trend);
-    Option *basket2 = new BasketOption(T, nbTimeSteps, size, strike);
+    Option *basket2 = new BasketOption(T, nbTimeSteps, size, weights, strike);
 
     pnl_rng_init(rng, PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
@@ -333,7 +344,7 @@ TEST(MonteCarlo, Basket_2_price_t_2){
     double ic2 = 0;
 
     BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2, trend);
-    Option *basket2_2  = new BasketOption(T - t, nbTimeSteps - step, size, strike);
+    Option *basket2_2  = new BasketOption(T - t, nbTimeSteps - step, size, weights, strike);
     MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, basket2_2, rng, fdStep, n_samples);
     mCarlo2->price(prix2, ic2);
 
@@ -374,9 +385,11 @@ TEST(MonteCarlo, Basket_2d_price_t_2){
     PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
 
     size_t n_samples = 50000;
+    
+    PnlVect *weights = pnl_vect_create_from_scalar(2, 0.5);    
 
     BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot, trend);
-    Option *basket2d = new BasketOption(T, nbTimeSteps, size, strike);
+    Option *basket2d = new BasketOption(T, nbTimeSteps, size, weights, strike);
 
     pnl_rng_init(rng, PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
@@ -400,7 +413,7 @@ TEST(MonteCarlo, Basket_2d_price_t_2){
     double ic2 = 0;
 
     BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2, trend);
-    Option *basket2d_2  = new BasketOption(T - t, nbTimeSteps - step, size, strike);
+    Option *basket2d_2  = new BasketOption(T - t, nbTimeSteps - step, size, weights, strike);
     MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, basket2d_2, rng, fdStep, n_samples);
     mCarlo2->price(prix2, ic2);
 
@@ -441,8 +454,10 @@ TEST(MonteCarlo, Perf_price_t_2){
 
     size_t n_samples = 50000;
 
+    PnlVect *weights = pnl_vect_create_from_scalar(5, 0.2);        
+
     BlackScholesModel *bsmodel = new BlackScholesModel(size, r, rho, sigma, spot, trend);
-    Option *perf = new PerformanceOption(T, nbTimeSteps, size);
+    Option *perf = new PerformanceOption(T, nbTimeSteps, size, weights);
 
     pnl_rng_init(rng, PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
@@ -466,7 +481,7 @@ TEST(MonteCarlo, Perf_price_t_2){
     double ic2 = 0;
 
     BlackScholesModel *bsmodel2 = new BlackScholesModel(size, r, rho, sigma, spot2, trend);
-    Option *perf2  = new PerformanceOption(T - t, nbTimeSteps - step, size);
+    Option *perf2  = new PerformanceOption(T - t, nbTimeSteps - step, size, weights);
     MonteCarlo *mCarlo2 = new MonteCarlo(bsmodel2, perf2, rng, fdStep, n_samples);
     mCarlo2->price(prix2, ic2);
 

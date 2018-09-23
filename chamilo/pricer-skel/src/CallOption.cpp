@@ -4,6 +4,7 @@
 
 #include "CallOption.hpp"
 
+CallOption::CallOption(double T, int nbTimeSteps, int size, PnlVect* weights, double strike){
 /**
 * Constructeur de la classe
 * @param[in] double T : maturité
@@ -11,10 +12,10 @@
 * @param[in] int size : dimension du modèle
 * @param[in] double strike : prix d'exercice de l'option
 */
-CallOption::CallOption(double T, int nbTimeSteps, int size, double strike){
     T_ = T;
     nbTimeSteps_ = nbTimeSteps;
     size_ = size;
+    weights_ = weights;
     strike_ = strike;
 }
 

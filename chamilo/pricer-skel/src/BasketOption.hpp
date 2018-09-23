@@ -11,6 +11,7 @@ public:
 
     double strike_; /// Prix d'exercice de l'option basket
 
+    BasketOption(double T, int nbTimeSteps, int size, PnlVect* weights, double strike);
     /**
     * Constructeur de la classe
     * @param[in] double T : maturité
@@ -18,7 +19,6 @@ public:
     * @param[in] int size : dimension du modèle
     * @param[in] double strike : prix d'exercice de l'option
     */
-    BasketOption(double T, int nbTimeSteps, int size, double strike);
 
     /**
      * Calcule la valeur du payoff sur la trajectoire

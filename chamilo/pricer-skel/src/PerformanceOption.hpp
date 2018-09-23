@@ -8,6 +8,7 @@
 class PerformanceOption : public Option {
 public:
 
+    PerformanceOption(double T, int nbTimeSteps, int size, PnlVect* weights);
     /**
     * Constructeur de la classe
     * @param[in] double T : maturité
@@ -15,7 +16,6 @@ public:
     * @param[in] int size : dimension du modèle
     * @param[in] double strike : prix d'exercice de l'option
     */
-    PerformanceOption(double T, int nbTimeSteps, int size);
 
     /**
      * Calcule la valeur du payoff sur la trajectoire

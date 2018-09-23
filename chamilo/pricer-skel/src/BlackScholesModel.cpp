@@ -91,7 +91,7 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *r
  * @param[in] T date jusqu'à laquelle on simule la trajectoire
  * @param[in] past trajectoire réalisée jusqu'a la date t
  */
-void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past){
+void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past, double nbSteps, int a){
 
     double delta_t = T / nbTimeSteps;
 
@@ -105,7 +105,7 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
     pnl_mat_chol(mat_Chol);
 
     //nbSteps correspondant
-    int a = 0;
+    /*int a = 0;
     double step_1 = t * nbTimeSteps / T ;
     double nbSteps = floor(t * nbTimeSteps / T);
     if (nbSteps == step_1) {
@@ -114,7 +114,7 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
     else{
       nbSteps += 2 ;
       a = 1;
-    }
+    }*/
 
     //simuler les vecteurs gaussien
     PnlMat *suite_Gauss = pnl_mat_create(nbTimeSteps - nbSteps + 2 + a, size_);
@@ -135,16 +135,14 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
     for (int d = 0; d < size_ ; ++d) {
         double prix_Prec = pnl_mat_get(past, past->m - 1, d);
         double prix = 0;
-        double cours_prec = 1;
-        double cours = 0;
+        double cours = 1;
         double sigma = pnl_vect_get(sigma_, d);
         pnl_mat_get_row(row_Chol, mat_Chol,d);
         for (int i = 1; i < nbTimeSteps - nbSteps + 2 + a; ++i) {
             pnl_mat_get_row(row_Gauss, suite_Gauss, i);
             produitScalaire = pnl_vect_scalar_prod(row_Gauss, row_Chol);
-            cours = cours_prec * exp((r_-(pow(sigma,2))/2)* delta_t + produitScalaire * sigma * sqrt(delta_t));
+            cours *= exp((r_-(pow(sigma,2))/2)* delta_t + produitScalaire * sigma * sqrt(delta_t));
             prix = prix_Prec * cours;
-            cours_prec = cours;
             pnl_mat_set(path, (i - 1 + nbSteps - a), d, prix);
         }
     }
