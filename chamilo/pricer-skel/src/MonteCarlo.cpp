@@ -99,6 +99,8 @@ void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *co
     PnlMat *increment_path = pnl_mat_create(opt_->nbTimeSteps_ + 1, mod_->size_);
     PnlMat *decrement_path = pnl_mat_create(opt_->nbTimeSteps_ + 1, mod_->size_);
 
+    pnl_mat_set_subblock(path, past, 0, 0);
+
     for (int d = 0; d < mod_->size_; d++) {
         sum = 0;
         sum2 = 0;
