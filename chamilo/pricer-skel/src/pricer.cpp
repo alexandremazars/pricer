@@ -18,26 +18,23 @@ int main(int argc, char **argv)
     string type;
     int size, timestep;
     size_t n_samples;
-    char *data_input;
+    char *infile, *market_file;
 
     if (argc > 4 || argc == 3){
         throw std::invalid_argument( "Invalid number of arguments for function" );
-    }
-
-    if (argc == 2){
-        char *data_input = argv[1];    
-    }
-
-    if (argc == 3){
+    } else if (argc == 2){
+        infile = argv[1];
+        
+    } else if (argc == 3){
         if (strcmp(argv[1], "-c") != 0){
             throw std::invalid_argument( "Option not implemented for function" );            
         } else {
-            char *data_input = argv[3];
-            char *market_file = argv[2];
+            infile = argv[1];
+            market_file = argv[2];
         }
     }
 
-    Param *P = new Parser(data_input);
+    Param *P = new Parser(infile);    
 
     P->extract("option type", type);
     P->extract("maturity", T);
