@@ -14,9 +14,9 @@ int main(int argc, char **argv)
 {
     double fdStep = 1;
     double T, r, strike, correlation;
-    PnlVect *spot, *sigma, *divid;
+    PnlVect *spot, *sigma, *divid, *trend;
     string type;
-    int size, timestep;
+    int size, timestep, hedging_dates_number;
     size_t n_samples;
     char *infile, *market_file;
 
@@ -52,8 +52,9 @@ int main(int argc, char **argv)
     }
     P->extract("timestep number", timestep);
     P->extract("sample number", n_samples);
+    P->extract("hedging dates number", hedging_dates_number);
+    P->extract("trend", trend, size);
 
-    printf("option!! : %s\n", argv[2]);
 
     BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot);
     Option *opt;
@@ -65,8 +66,6 @@ int main(int argc, char **argv)
             opt = new PerformanceOption(T, timestep, size);        
     }
 
-    printf("option: %f, %i, %i\n", opt->T_, opt->nbTimeSteps_, opt->size_);
-    printf("strike:%f\n", strike);
 
     PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
     //
@@ -88,6 +87,9 @@ int main(int argc, char **argv)
         printf("Standard Deviation actif %u: %f\n", i+1, pnl_vect_get(conf_delta, i));
     }
 
+    PnlMat *path = pnl_mat_create(hedging_dates_number+1, size);    
+    PnlVect *hedge = pnl_vect_create(hedging_dates_number+1);
+    mCarlo->listHedge(hedge, path);
 
     pnl_mat_free(&past);
     pnl_vect_free(&delta);
