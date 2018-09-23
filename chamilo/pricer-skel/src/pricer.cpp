@@ -7,35 +7,39 @@
 #include "BasketOption.hpp"
 #include "CallOption.hpp"
 #include "PerformanceOption.hpp"
+#include <time.h>
+
 
 using namespace std;
 
 int main(int argc, char **argv)
 {
+    clock_t t1, t2, t3, t4;
+    t1=clock();
     double fdStep = 1;
     double T, r, strike, correlation;
-    PnlVect *spot, *sigma, *divid, *trend;
+    PnlVect *spot, *sigma, *divid;
     string type;
     int size, timestep, hedging_dates_number;
     size_t n_samples;
     char *infile, *market_file;
-
-    if (argc > 4 || argc == 3){
+    if (argc >= 5 || argc == 3){     
         throw std::invalid_argument( "Invalid number of arguments for function" );
-    } else if (argc == 2){
+    } else if (argc == 2){  
         infile = argv[1];
-
-    } else if (argc == 3){
+    } else if (argc == 4){
         if (strcmp(argv[1], "-c") != 0){
             throw std::invalid_argument( "Option not implemented for function" );
         } else {
-            infile = argv[1];
+            infile = argv[3];
             market_file = argv[2];
         }
+            printf("t'es là ou t'es pas là?\n");
+
     }
-
+ 
     Param *P = new Parser(infile);
-
+    
     P->extract("option type", type);
     P->extract("maturity", T);
     P->extract("option size", size);
@@ -53,7 +57,6 @@ int main(int argc, char **argv)
     P->extract("timestep number", timestep);
     P->extract("sample number", n_samples);
     P->extract("hedging dates number", hedging_dates_number);
-    P->extract("trend", trend, size);
 
     PnlVect* trend = pnl_vect_create_from_zero(size);
 
@@ -80,21 +83,35 @@ int main(int argc, char **argv)
     double prix = 0.0;
     double ic = 0.0;
     mCarlo->price(prix , ic);
-    printf("============== \nPrix: %f \nIc: %f \n==============\n", prix, ic);
+    printf("============== \nPrix: %f \nIc: %f \n", prix, ic);
+    t2 = clock();
+    float diff ((float)t2-(float)t1);
+    float seconds = diff / CLOCKS_PER_SEC;
+    printf("%f sec\n==============\n", seconds);
 
     PnlMat *past = pnl_mat_create_from_scalar(1, size, 100);
     PnlVect *delta = pnl_vect_create(size);
     PnlVect *conf_delta = pnl_vect_create(size);
+
 
     mCarlo->delta(past, 0, delta, conf_delta);
     for (int i =0; i < size; i ++){
         printf("Delta actif %u: %f\n", i+1, pnl_vect_get(delta, i));
         printf("Standard Deviation actif %u: %f\n", i+1, pnl_vect_get(conf_delta, i));
     }
-
-    PnlMat *path = pnl_mat_create(hedging_dates_number+1, size);    
-    PnlVect *hedge = pnl_vect_create(hedging_dates_number+1);
-    mCarlo->listHedge(hedge, path);
+    t3 = clock();
+    float diff2 ((float)t3-(float)t1);
+    float seconds2 = diff2 / CLOCKS_PER_SEC;
+    printf("%f sec\n==============\n", seconds2);
+    
+    PnlMat *market = pnl_mat_create_from_file(market_file);
+    double pnl = 0;
+    mCarlo->pnl(pnl, market, hedging_dates_number);
+    printf("P&L: %f\n", pnl);
+    t4 = clock();
+    float diff3 ((float)t4-(float)t1);
+    float seconds3 = diff3 / CLOCKS_PER_SEC;
+    printf("%f sec\n", seconds3);
 
     pnl_mat_free(&past);
     pnl_vect_free(&delta);
