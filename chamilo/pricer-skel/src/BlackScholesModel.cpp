@@ -4,12 +4,13 @@
 
 #include "BlackScholesModel.hpp"
 
-BlackScholesModel::BlackScholesModel(int size, double r, double rho, PnlVect *sigma, PnlVect *spot){
+BlackScholesModel::BlackScholesModel(int size, double r, double rho, PnlVect *sigma, PnlVect *spot, PnlVect *trend){
     size_ = size;
     r_ = r;
     rho_ = rho;
     sigma_ = sigma;
     spot_ = spot;
+    trend_ = trend ;
 }
 
 /**
@@ -149,4 +150,54 @@ void BlackScholesModel::shiftAsset(PnlMat *shift_path, const PnlMat *path, int d
     for (int i = nbSteps; i < nbTimeSteps; i++) {
       pnl_mat_set(shift_path, i , d, (1+h) * pnl_mat_get(path, i , d));
     }
+}
+
+void BlackScholesModel::simul_market(PnlMat *simulatedMarket, double T, PnlRng *rng){
+  int H =  simulatedMarket->m -1;
+  double delta_h = T / H;
+
+  //Remplir la matrice de correlation
+  PnlMat *mat_Chol = pnl_mat_create_from_scalar(size_, size_, rho_ );
+  for (int i = 0; i < size_; ++i) {
+      pnl_mat_set(mat_Chol, i, i, 1);
+  }
+
+  //Matrice de Cholesky
+  pnl_mat_chol(mat_Chol);
+
+  //Simuler vecteurs gaussiens
+  PnlMat *suite_Gauss = pnl_mat_create(H + 1, size_);
+  PnlVect *G = pnl_vect_new();
+  for (int d = 0; d < size_; ++d) {
+      G = pnl_vect_new();
+      pnl_vect_rng_normal(G, H + 1, rng);
+      pnl_mat_set_col(suite_Gauss, G, d);
+  }
+
+  //Calcul des prix
+  PnlVect *row_Chol = pnl_vect_create(size_);
+  PnlVect *row_Gauss = pnl_vect_create(size_);
+  double produitScalaire;
+  for (int d = 0; d < size_ ; ++d) {
+      double prix_Prec = pnl_vect_get(spot_, d);
+      double prix = prix_Prec;
+      pnl_mat_set(simulatedMarket, 0, d, prix_Prec);
+      double sigma = pnl_vect_get(sigma_, d);
+      double trend = pnl_vect_get(trend_, d);
+      pnl_mat_get_row(row_Chol, mat_Chol, d);
+      for (int i = 1; i < H+1; ++i) {
+          pnl_mat_get_row(row_Gauss, suite_Gauss, i);
+          produitScalaire = pnl_vect_scalar_prod(row_Gauss, row_Chol);
+          prix = prix_Prec * exp((trend-(pow(sigma,2))/2) * delta_h + produitScalaire * sigma * sqrt(delta_h));
+          pnl_mat_set(simulatedMarket, i, d, prix);
+          prix_Prec = prix;
+      }
+  }
+
+  pnl_vect_free(&row_Chol);
+  pnl_vect_free(&row_Gauss);
+  pnl_mat_free(&suite_Gauss);
+  pnl_mat_free(&mat_Chol);
+  pnl_vect_free(&G);
+
 }

@@ -32,8 +32,9 @@ TEST(MonteCarlo, BasketDelta0){
     P->extract("strike", strike);
     P->extract("timestep number", timestep);
     P->extract("sample number", n_samples);
+    PnlVect *trend = pnl_vect_create_from_zero(size);
 
-    BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot);
+    BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot, trend);
     Option *bOption = new BasketOption(T, timestep, size, strike);
     PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
     //
@@ -44,7 +45,7 @@ TEST(MonteCarlo, BasketDelta0){
     PnlMat *past = pnl_mat_create_from_scalar(1, size, 100);
     PnlVect *delta = pnl_vect_create(size);
     PnlVect *conf_delta = pnl_vect_create(size);
-    
+
     mCarlo->delta(past, 0, delta, conf_delta);
 
     for (int i =0; i < size; i ++){

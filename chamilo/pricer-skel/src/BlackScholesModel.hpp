@@ -15,8 +15,9 @@ public:
     double rho_; /// paramètre de corrélation
     PnlVect *sigma_; /// vecteur de volatilités
     PnlVect *spot_; /// valeurs initiales des sous-jacents
+    PnlVect *trend_; ///vecteur des tendances
 
-    BlackScholesModel(int size, double r, double rho, PnlVect *sigma, PnlVect *spot);
+    BlackScholesModel(int size, double r, double rho, PnlVect *sigma, PnlVect *spot, PnlVect *trend);
 
 
     /**
@@ -58,4 +59,5 @@ public:
      */
     void shiftAsset(PnlMat *shift_path, const PnlMat *path, int d, double h, double t, double timestep);
 
+    void simul_market(PnlMat *simulatedMarket, double T, PnlRng *rng);
 };

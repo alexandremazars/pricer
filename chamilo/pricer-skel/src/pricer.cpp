@@ -24,17 +24,17 @@ int main(int argc, char **argv)
         throw std::invalid_argument( "Invalid number of arguments for function" );
     } else if (argc == 2){
         infile = argv[1];
-        
+
     } else if (argc == 3){
         if (strcmp(argv[1], "-c") != 0){
-            throw std::invalid_argument( "Option not implemented for function" );            
+            throw std::invalid_argument( "Option not implemented for function" );
         } else {
             infile = argv[1];
             market_file = argv[2];
         }
     }
 
-    Param *P = new Parser(infile);    
+    Param *P = new Parser(infile);
 
     P->extract("option type", type);
     P->extract("maturity", T);
@@ -55,28 +55,33 @@ int main(int argc, char **argv)
     P->extract("hedging dates number", hedging_dates_number);
     P->extract("trend", trend, size);
 
+    PnlVect* trend = pnl_vect_create_from_zero(size);
 
-    BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot);
-    Option *opt;
+    Option* opt;
+
+    BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot, trend);
     if (type == "asian"){
-            opt = new AsianOption(T, timestep, size, strike);        
-        } else if ( type == "basket"){
-            opt = new BasketOption(T, timestep, size, strike);   
-        } else if ( type == "performance"){
-            opt = new PerformanceOption(T, timestep, size);        
+        opt = new AsianOption(T, timestep, size, strike);
+    } else if ( type == "basket"){
+        opt = new BasketOption(T, timestep, size, strike);
+    } else if ( type == "performance"){
+        opt = new PerformanceOption(T, timestep, size);
     }
 
 
     PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
+
     //
     pnl_rng_init(rng, PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
+
+
     MonteCarlo *mCarlo = new MonteCarlo(bsmodel, opt, rng, fdStep, n_samples);
     double prix = 0.0;
     double ic = 0.0;
     mCarlo->price(prix , ic);
     printf("============== \nPrix: %f \nIc: %f \n==============\n", prix, ic);
-    
+
     PnlMat *past = pnl_mat_create_from_scalar(1, size, 100);
     PnlVect *delta = pnl_vect_create(size);
     PnlVect *conf_delta = pnl_vect_create(size);
@@ -104,5 +109,3 @@ int main(int argc, char **argv)
     delete opt;
     delete mCarlo;
 }
-
-
