@@ -31,12 +31,14 @@ TEST(MonteCarlo, Performance_price_0){
     P->extract("sample number", n_samples);
 
     BlackScholesModel *bsmodel = new BlackScholesModel(size, r, correlation, sigma, spot);
-    Option *pOption = new PerformanceOption(T, timestep, size);
+    Option *opt = new PerformanceOption(T, timestep, size);
     PnlRng *rng= pnl_rng_create(PNL_RNG_MERSENNE);
+    printf("option: %f, %i, %i", opt->T_, opt->nbTimeSteps_, opt->size_);
     //
+
     pnl_rng_init(rng, PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
-    MonteCarlo *mCarlo = new MonteCarlo(bsmodel, pOption, rng, fdStep, n_samples);
+    MonteCarlo *mCarlo = new MonteCarlo(bsmodel, opt, rng, fdStep, n_samples);
     double prix = 0.0;
     double ic = 0.0;
     mCarlo->price(prix , ic);
@@ -50,7 +52,7 @@ TEST(MonteCarlo, Performance_price_0){
     pnl_rng_free(&rng);
     delete P;
     delete bsmodel;
-    delete pOption;
+    delete opt;
     delete mCarlo;
 }
 

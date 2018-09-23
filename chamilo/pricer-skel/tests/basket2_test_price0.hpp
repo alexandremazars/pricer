@@ -41,6 +41,8 @@ TEST(MonteCarlo, Basket2_price_0){
     double prix = 0.0;
     double ic = 0.0;
     mCarlo->price(prix , ic);
+    printf("============== \nPrix: %f \nIc: %f \n==============\n", prix, ic);
+    
 
     ASSERT_LE(9.238710 - ic, prix) << "Error, price at t=0 not in confidence interval, too low";
     ASSERT_GE(9.238710 + ic, prix) << "Error, price at t=0 not in confidence interval, too high";
@@ -59,4 +61,5 @@ TEST(MonteCarlo, Basket2_price_0){
 }
 
 
-#endif //CHAMILO_TEST_ASIAN_PRICE0
+#endif // CHAMILO_TEST_BASKET2_PRICE0
+
