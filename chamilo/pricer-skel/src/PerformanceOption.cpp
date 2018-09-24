@@ -36,5 +36,7 @@ double PerformanceOption::payoff(const PnlMat *path) {
       double rapport = pnl_vect_scalar_prod(weights_, price_i)/pnl_vect_scalar_prod(weights_, price_i1) ;
       sum_N += fmax(rapport - 1, 0);
     }
+    pnl_vect_free(&price_i);
+    pnl_vect_free(&price_i1);
     return 1 + sum_N;
 }
